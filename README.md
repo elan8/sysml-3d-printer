@@ -1,5 +1,9 @@
 # Desktop 3D printer (SysML v2)
 
+![Elan8 desktop 3D printer printing a bracket in an engineering lab](docs/assets/printer-concept.webp)
+
+*AI-generated concept illustration of the printer.*
+
 A desktop fused-filament printer for an engineering team that prints functional prototypes: brackets, jigs and
 fit checks, in PLA, PETG and ABS. It is a worked example of a model-based systems engineering project that
 carries the engineering from the stakeholders' needs to **verification by simulation of the real firmware**, and
