@@ -31,7 +31,14 @@ interested in model-based systems engineering with control engineering in it, th
 
 ![System boundary showing the engineer, technician, team lead, office neighbour, filament and mains power](docs/system-overview/context.svg)
 
-See the [system overview](docs/system-overview/README.md) for the lead architecture and its six subsystems.
+## System architecture
+
+![The lead printer architecture: motion control commands the motor drive, hotend and heated bed; feedback returns to control; the drive moves the CoreXY structure; a 600 W supply powers the loads](docs/system-overview/architecture.svg)
+
+The lead candidate, `CoreXYClosedShaped`, with its six subsystems and the command, feedback, power and motion paths
+between them. The drawing is authored to match the model; the [system overview](docs/system-overview/README.md) explains
+it, and the [Design Specification](https://elan8.github.io/sysml-3d-printer/FDM-SDS-001.pdf) has the generated diagram of
+the same candidate.
 
 ## The decision in one minute
 
