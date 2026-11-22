@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# SPDX-FileCopyrightText: 2026 Elan8
+# SPDX-License-Identifier: MIT
 # Verify one axis (SYS-006, 007 and 008) with Run42 for the controllers: an open-loop stepper, a closed-loop stepper and a
 # brushless servo, each with a trapezoidal move and with a shaper tuned to its axis, and the open-loop stepper with a
 # shaper tuned to the belt alone. Writes the verdicts, traces and plots into build/axis/. A failing verdict is

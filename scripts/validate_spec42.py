@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# SPDX-FileCopyrightText: 2026 Elan8
+# SPDX-License-Identifier: MIT
 """Run `spec42 check` over this repository, filtering advisory diagnostics.
 
 By default, diagnostics with `source =

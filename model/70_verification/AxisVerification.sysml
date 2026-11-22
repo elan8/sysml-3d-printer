@@ -1,5 +1,6 @@
 /*
  * SPDX-FileCopyrightText: 2026 Elan8
+ * SPDX-License-Identifier: MIT
  *
  * Verification of one axis by simulation: the motion controller's firmware plays a 20 mm move at 300 mm/s and
  * 10,000 mm/s^2 on the axis plant (AxisPlant::BeltAxis), and the test bench monitor in the firmware measures how it

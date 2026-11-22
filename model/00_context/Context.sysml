@@ -1,5 +1,6 @@
 /*
  * SPDX-FileCopyrightText: 2026 Elan8
+ * SPDX-License-Identifier: MIT
  *
  * Project context: the printing job the printer is for, who is involved, and the environment it works in. The
  * reference scenario is an engineering team printing functional prototypes on a desktop fused-filament

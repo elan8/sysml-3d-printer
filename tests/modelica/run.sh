@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# SPDX-FileCopyrightText: 2026 Elan8
+# SPDX-License-Identifier: MIT
 # Compiles and simulates the axis models (AxisTests.mo) with rumoca and checks the results against references derived
 # without a simulator (check.py). Needs the Elan8 domain library's Modelica package (the `Elan8/` directory of the
 # release's Modelica archive, with the StepperMotor class): set ELAN8_MODELICA to the directory that holds it.

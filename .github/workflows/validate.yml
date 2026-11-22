@@ -1,0 +1,132 @@
+# SPDX-FileCopyrightText: 2026 Elan8
+# SPDX-License-Identifier: MIT
+name: Validate and build documents
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  DOC42_VERSION: "0.8.1"
+
+jobs:
+  model:
+    name: Model, tests and documents
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install numpy
+        run: python3 -m pip install numpy
+
+      - name: Prepare the pinned domain libraries
+        run: |
+          domain_path="$(PYTHONPATH=scripts python3 -c 'from _spec42 import domain_library_path; print(domain_library_path())')"
+          echo "SPEC42_KPAR_LIBRARY_PATH_DOMAIN=$domain_path" >> "$GITHUB_ENV"
+
+          version="$(jq -r .version config/domain-library.json)"
+          repository="$(jq -r .repository config/domain-library.json)"
+          release="${repository%.git}/releases/download/v$version"
+          archive="elan8-domain-modelica-$version.zip"
+          modelica="$GITHUB_WORKSPACE/.libraries/modelica"
+          mkdir -p "$modelica"
+          curl --fail --silent --show-error --location --retry 3 "$release/$archive" --output "$modelica/$archive"
+          (
+            cd "$modelica"
+            sha256sum --check --ignore-missing "$GITHUB_WORKSPACE/.cache/SHA256SUMS-$version.txt"
+            unzip -q "$archive"
+          )
+          echo "ELAN8_MODELICA=$modelica" >> "$GITHUB_ENV"
+
+      # Spec42 is downloaded, at the release pinned in .spec42-version, by the script.
+      - name: Validate the model
+        run: python3 scripts/validate_spec42.py
+
+      # The trade study, the generated files and the axis design are checked against the model.
+      - name: Test
+        run: python3 -B -m unittest discover -s tests
+
+      - name: Check the Modelica reference cases of the plant
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: bash tests/modelica/run.sh
+
+      # The four engineering documents, built from the model and the generated prose and figures.
+      - name: Install Doc42
+        uses: elan8/doc42-release@v0.8.1
+        with:
+          version: ${{ env.DOC42_VERSION }}
+
+      - name: Check documents
+        run: doc42 check model --workspace-root .
+
+      # Building needs an Elan8 API token, which pull requests from forks cannot read.
+      - name: Build documents
+        if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+        env:
+          ELAN8_TOKEN: ${{ secrets.ELAN8_TOKEN }}
+        run: |
+          for document in crs srs sds vvr; do
+            doc42 build model --workspace-root . --doc "PrinterDocuments::$document" --out generated/documents
+          done
+
+      - name: Upload documents
+        if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+        uses: actions/upload-artifact@v4
+        with:
+          name: documents
+          path: generated/documents/*.pdf
+          if-no-files-found: error
+
+      # With the repository variable PUBLISH_PAGES set to true, the documents are also published to GitHub Pages with an
+      # index page (Settings, Pages, Source: GitHub Actions).
+      - name: Write documents index
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main' && vars.PUBLISH_PAGES == 'true'
+        env:
+          ELAN8_TOKEN: ${{ secrets.ELAN8_TOKEN }}
+        run: |
+          irs=()
+          for document in crs srs sds vvr; do
+            doc42 ir model --workspace-root . --doc "PrinterDocuments::$document" > "$RUNNER_TEMP/$document.ir.json"
+            irs+=("$RUNNER_TEMP/$document.ir.json")
+          done
+          python3 scripts/build-documents-index.py "${irs[@]}" --out generated/documents \
+            --repository "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY" --commit "$GITHUB_SHA" \
+            --doc42 "$(doc42 --version)"
+
+      - name: Upload Pages artifact
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main' && vars.PUBLISH_PAGES == 'true'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: generated/documents
+
+  pages:
+    name: Publish documents
+    needs: model
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && vars.PUBLISH_PAGES == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    concurrency:
+      group: pages
+      cancel-in-progress: false
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

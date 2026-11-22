@@ -1,0 +1,5 @@
+The printer is verified by **simulation**, because no printer has been built. A requirement is verified when a simulation of the part of the design that decides it, driven by the real firmware where there is firmware, shows that the requirement's limit is met. The method of each verification case is `test`: a run of the model against a stated pass criterion.
+
+The simulation tool is Run42: it composes the Modelica classes behind the SysML parts, runs the controller firmware (WebAssembly) in the loop against them, and judges the assertions of a verification case. The plant parts come from the Elan8 domain library. The numbers of the case are compared with an independent integration of the whole axis written in Python (`scripts/axis_design.py`), which agrees with the Run42 runs to under a micrometre.
+
+Requirements that the architecture decides by arithmetic (the build volume, the mass, the cost, the power supply rating, the heat-up times) are judged in the trade study of the System Design Specification, not here; they are not verified by simulation, and the matrix below shows them as not verified.

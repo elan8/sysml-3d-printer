@@ -1,5 +1,6 @@
 /*
  * SPDX-FileCopyrightText: 2026 Elan8
+ * SPDX-License-Identifier: MIT
  *
  * The motion structure: frame, linear guides, belts and the way the toolhead and the bed move. Three designs are
  * compared: a CoreXY on an aluminium extrusion frame, a CoreXY with wide belts on a steel sheet frame, and a

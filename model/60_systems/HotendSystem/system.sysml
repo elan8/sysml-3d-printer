@@ -1,5 +1,6 @@
 /*
  * SPDX-FileCopyrightText: 2026 Elan8
+ * SPDX-License-Identifier: MIT
  *
  * The hotend: the heater block, nozzle, thermistor and cooling that melt the filament. Three designs are
  * compared: a standard PTFE-lined hotend, an all-metal hotend, and a high-flow hotend with a larger heater

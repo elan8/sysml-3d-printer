@@ -1,3 +1,8 @@
+<!--
+SPDX-FileCopyrightText: 2026 Elan8
+SPDX-License-Identifier: MIT
+-->
+
 # The axis model
 
 One motion axis, built from the Elan8 domain library: a stepper motor on two current-regulated bridges, a 20-tooth

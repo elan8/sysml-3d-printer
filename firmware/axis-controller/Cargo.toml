@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 Elan8
+# SPDX-License-Identifier: MIT
 # The motion controller of one axis as firmware for Run42's WebAssembly guest interface (ABI version 2): a trapezoidal
 # move, an optional zero-vibration input shaper, microstep quantisation and a drive.
 # The drive is an open-loop stepper (the default), a closed-loop stepper (`closed_loop`) or a brushless servo (`servo`).

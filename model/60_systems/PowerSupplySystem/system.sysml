@@ -1,5 +1,6 @@
 /*
  * SPDX-FileCopyrightText: 2026 Elan8
+ * SPDX-License-Identifier: MIT
  *
  * The power supply: a 24 V supply for the heaters, the motors and the electronics. Three ratings are compared.
  * The printer must not ask for more than the supply is rated for.
