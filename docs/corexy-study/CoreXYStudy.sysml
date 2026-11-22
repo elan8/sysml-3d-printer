@@ -18,6 +18,12 @@ package CoreXYStudy {
       @Section { title = "Design and verification method"; }
       @Prose { file = "design.md"; }
     }
+    view stage {
+      @Section { title = "Stage and measurement points"; }
+      doc /* The pulley encoders feed each stepper's field angle and current controller. Run42 uses independent
+             nozzle-position samples to score tracking, ringing and settling. */
+      @Figure { file = "corexy-plant.svg"; caption = "Belt arrows indicate positive travel. The encoders read pulley travel and the test bench reads nozzle position."; }
+    }
     view results {
       @Section { title = "Results"; }
       @Prose { file = "results.md"; }

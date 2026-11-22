@@ -8,6 +8,8 @@ Take **CoreXYClosedShaped** as the lead architecture: a CoreXY on an aluminium e
 closed-loop stepper motors, a high-flow hotend (80 W), a 400 W bed, a 600 W supply, and a 32-bit control board
 with input shaping, pressure advance and a model-based thermal runaway monitor.
 
+![Lead architecture showing the six subsystems and the command, feedback, motion and power paths](../docs/system-overview/architecture.svg)
+
 ## Why
 
 `docs/trade-study.md` compares six candidates against the 18 requirements the architecture decides (the rest

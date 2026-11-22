@@ -30,6 +30,12 @@ approach to the sharp vertex measures geometric rounding separately.
 The results apply to this simulated routing and load. Axis-specific moving mass, varying belt stiffness,
 friction and gantry racking still need characterization.
 
+## Stage and measurement points
+
+The pulley encoders feed each stepper's field angle and current controller. Run42 uses independent nozzle-position samples to score tracking, ringing and settling.
+
+![CoreXY plan view showing belt routing, the two pulley encoders and the measured nozzle position](corexy-plant.svg)
+
 ## Results
 
 | Run | Verdict | Tracking (µm) | Post-move (µm) | Settling (ms) | Endpoint (µm) |

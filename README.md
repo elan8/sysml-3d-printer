@@ -23,6 +23,12 @@ Speed meets stiffness at the axis: the toolhead's moving mass on the belts and t
 resonance, and every acceleration shakes it. The controller's input shaper, the motors, the belts and the frame
 decide how fast the printer can go before the vibration shows in the part.
 
+## System context
+
+![System boundary showing the engineer, technician, team lead, office neighbour, filament and mains power](docs/system-overview/context.svg)
+
+See the [system overview](docs/system-overview/README.md) for the lead architecture and its six subsystems.
+
 ## What is in the model
 
 | Area | Where |
