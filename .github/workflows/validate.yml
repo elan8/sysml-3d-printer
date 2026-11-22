@@ -166,6 +166,13 @@ jobs:
       - name: Add the WebAssembly target for the firmware
         run: rustup target add wasm32-unknown-unknown
 
+      # Which token Run42 uses and the licence it obtained, for diagnosing an access problem. It prints no secret.
+      - name: Show the Run42 licence
+        continue-on-error: true
+        env:
+          ELAN8_TOKEN: ${{ secrets.ELAN8_TOKEN }}
+        run: '"$RUN42" license'
+
       # A failing verdict is a result: the trapezoidal moves are expected to fail. The next step checks the pattern.
       - name: Verify the axis
         env:
