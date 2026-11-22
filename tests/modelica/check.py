@@ -46,6 +46,16 @@ omega = math.sqrt(K_BELT / M)
 check("AxisBeltOnly", max(abs(r["carriage.s"] - X0 * math.cos(omega * r["time"])) for r in rows), 1e-9, "carriage position [m]")
 print(f"      first resonance of the belt alone: {omega / (2 * math.pi):.2f} Hz")
 
+# For two equal belt springs, the transform gives Cartesian stiffness 2k and equilibrium
+# ((a+b)/2, (a-b)/2). Both axes start at rest at the origin.
+rows = load("CoreXYBeltOnly")
+for axis, equilibrium in (("X", 2e-4), ("Y", 1e-4)):
+    worst = max(
+        abs(row[f"carriage{axis}.s"] - equilibrium * (1.0 - math.cos(omega * row["time"])))
+        for row in rows
+    )
+    check("CoreXYBeltOnly", worst, 1e-9, f"{axis} carriage position [m]")
+
 # Holding a fixed field angle the stepper is a torsional spring, torque = KT I sin(-p theta) = -KT I p theta for small
 # angles, which at the belt (x = r theta) is a spring of k_m = KT I p / r^2, and the rotor is a mass J / r^2. The axis
 # is then two masses and two springs, and its angular frequencies are the roots of

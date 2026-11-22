@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="8 0 944 526" role="img" aria-labelledby="title desc">
+  <!-- SPDX-FileCopyrightText: 2026 Elan8 -->
+  <!-- SPDX-License-Identifier: MIT -->
+  <title id="title">Desktop printer in its engineering workspace</title>
+  <desc id="desc">The engineer supplies a sliced job and receives the part and status. The technician services the printer, the team lead sets priorities, and the office neighbour experiences its effects. Filament and mains power enter the printer boundary.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 10 5 0 10Z" fill="#0b7181"/>
+    </marker>
+  </defs>
+  <rect width="960" height="526" fill="#fff"/>
+  <rect x="12" y="12" width="936" height="502" rx="16" fill="#f2f6f8" stroke="#b9cbd3"/>
+  <g font-family="DejaVu Sans, Arial, sans-serif" fill="#173143">
+    <text x="38" y="47" font-size="25" font-weight="700">Engineering workspace</text>
+    <text x="38" y="73" font-size="17" fill="#425c6a">Shared office or lab</text>
+    <g fill="#fff" stroke="#bdcdd5">
+      <rect x="38" y="104" width="200" height="106" rx="10"/>
+      <rect x="38" y="232" width="200" height="101" rx="10"/>
+      <rect x="38" y="355" width="200" height="106" rx="10"/>
+      <rect x="722" y="104" width="200" height="106" rx="10"/>
+      <rect x="722" y="232" width="200" height="101" rx="10"/>
+      <rect x="722" y="355" width="200" height="106" rx="10"/>
+    </g>
+    <g font-size="20" font-weight="700">
+      <text x="54" y="135">Engineer</text>
+      <text x="54" y="264">Technician</text>
+      <text x="54" y="386">Team lead</text>
+      <text x="738" y="135">Filament supply</text>
+      <text x="738" y="264">Mains outlet</text>
+      <text x="738" y="386">Office neighbour</text>
+    </g>
+    <g font-size="16" fill="#425c6a">
+      <text x="54" y="162">Prepares and starts</text><text x="54" y="184">the print</text>
+      <text x="54" y="292">Calibrates and</text><text x="54" y="314">maintains the printer</text>
+      <text x="54" y="414">Sets budget and</text><text x="54" y="436">turnaround goals</text>
+      <text x="738" y="162">PLA, PETG or ABS</text>
+      <text x="738" y="292">Workspace power</text>
+      <text x="738" y="414">Shares the room</text>
+    </g>
+    <rect x="350" y="104" width="260" height="357" rx="13" fill="#fff" stroke="#0b7181" stroke-width="2.5"/>
+    <path d="M364 104H596Q610 104 610 118V164H350V118Q350 104 364 104Z" fill="#123747"/>
+    <text x="480" y="131" text-anchor="middle" fill="#fff" font-size="20" font-weight="700">Desktop FFF printer</text>
+    <text x="480" y="152" text-anchor="middle" fill="#d6e9ee" font-size="15">System of interest</text>
+    <g fill="none" stroke="#0b7181" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M402 321V209H558V321M390 322H570V350H390ZM402 232H558M480 232V255L470 270H490L480 255M420 303H540"/>
+      <path d="M449 302L469 284H501V302" fill="#dceff1"/>
+    </g>
+    <text x="480" y="393" text-anchor="middle" font-size="18" font-weight="700">Produces functional parts</text>
+    <g fill="none" stroke="#0b7181" stroke-width="2" marker-end="url(#arrow)">
+      <path d="M238 146H349"/>
+      <path d="M350 184H239"/>
+      <path d="M238 284H349"/>
+      <path d="M238 408H349"/>
+      <path d="M722 154H611"/>
+      <path d="M722 284H611"/>
+      <path d="M610 408H721"/>
+    </g>
+    <g font-size="15" text-anchor="middle" fill="#133d4b">
+      <text x="294" y="137">Sliced job</text>
+      <text x="294" y="175">Part, status</text>
+      <text x="294" y="275">Service</text>
+      <text x="294" y="399">Priorities</text>
+      <text x="666" y="145">Filament</text>
+      <text x="666" y="275">Mains power</text>
+      <text x="666" y="399">Noise, odour</text>
+    </g>
+  </g>
+</svg>

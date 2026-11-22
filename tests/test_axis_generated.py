@@ -15,6 +15,10 @@ class GeneratedFiles(unittest.TestCase):
             committed = json.loads((ROOT / "verification" / f"axis-{name}.json").read_text(encoding="utf-8"))
             self.assertEqual(committed, drivers.driver(module, plant, drive), f"run scripts/generate_axis_drivers.py ({name})")
 
+    def test_the_corexy_driver_is_what_the_generator_writes(self):
+        path = ROOT / "verification" / "corexy-diagonal.json"
+        self.assertEqual(json.loads(path.read_text(encoding="utf-8")), drivers.corexy_driver())
+
     def test_an_open_loop_stepper_controller_provides_only_the_bench_monitor_position(self):
         driver = drivers.driver("axis-open-shaped.wasm")
         self.assertEqual({b["input"] for b in driver["bindings"]}, {"fieldAngle", "currentCommand"})
