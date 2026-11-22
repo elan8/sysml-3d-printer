@@ -96,6 +96,12 @@ class Model:
         return result
 
 
+# The tracking error of a shaped move is about 1.4 times the stretch of the belt, m a / k: the Run42 verification of one axis
+# (docs/axis-verification.md) gives 72 to 80 um at 10 m/s^2 and 143 to 146 um at 20 m/s^2 for every drive, against a stretch
+# of 53 and 106 um.
+TRACKING_FACTOR = 1.4
+
+
 def metrics(model, designs, limits, reference):
     d = {child: model.attributes(design) for child, design in designs.items()}
     structure, drive, hotend, bed = d["structure"], d["drive"], d["hotend"], d["bed"]
@@ -109,6 +115,9 @@ def metrics(model, designs, limits, reference):
     # What the motors can give, and what the ringing limit allows.
     from_motors = drive["forceAtSpeed"] * structure["motorForceFactor"] / moving
     from_ringing = limits["ringingLimit"] * omega2 / control["ringingFactor"]
+    # And what the tracking limit allows: the belt stretches by m a / k whichever drive pulls on it.
+    from_tracking = limits["trackingErrorLimit"] * structure["stiffness"] / (TRACKING_FACTOR * moving)
+    tracking = TRACKING_FACTOR * moving * limits["referenceAcceleration"] / structure["stiffness"]
     # The fastest toolhead speed: the controller's step rate or the motor's speed, over the belt speed factor.
     belt_from_control = control["maxStepRate"] / drive["stepsPerMm"] / 1000
     speed = min(belt_from_control, drive["maxBeltSpeed"]) / structure["beltSpeedFactor"]
@@ -118,8 +127,8 @@ def metrics(model, designs, limits, reference):
     bed_heat = bed["thermalMass"] * reference["bedTargetRise"] / (bed["heaterPower"] - bed["meanLoss"])
     return {
         "build": min(structure["buildX"], structure["buildY"], structure["buildZ"]),
-        "speed": speed, "acceleration": min(from_motors, from_ringing), "from_motors": from_motors,
-        "from_ringing": from_ringing, "budget": budget, "thermal": thermal, "resonance": omega / (2 * math.pi),
+        "speed": speed, "acceleration": min(from_motors, from_ringing, from_tracking), "from_motors": from_motors,
+        "from_ringing": from_ringing, "from_tracking": from_tracking, "tracking": tracking, "budget": budget, "thermal": thermal, "resonance": omega / (2 * math.pi),
         "ringing": ringing, "moving": moving,
         "hotend_heat": hotend_heat, "hotend_temp": hotend["maxTemperature"], "flow": hotend["maxFlow"],
         "temp_error": control["hotendTemperatureError"], "bed_heat": bed_heat,
@@ -140,6 +149,7 @@ CHECKS = [
     ("SYS-004", "Dimensional accuracy (estimate)", lambda m: m["budget"], "positioningErrorLimit", "<=", "{:.0f} um", 1e6),
     ("SYS-005", "First resonance", lambda m: m["resonance"], "resonanceRequired", ">=", "{:.0f} Hz"),
     ("SYS-006", "Ringing (estimate)", lambda m: m["ringing"], "ringingLimit", "<=", "{:.0f} um", 1e6),
+    ("SYS-008", "Tracking (estimate)", lambda m: m["tracking"], "trackingErrorLimit", "<=", "{:.0f} um", 1e6),
     ("SYS-009", "Hotend heat-up", lambda m: m["hotend_heat"], "hotendHeatUpLimit", "<=", "{:.0f} s"),
     ("SYS-010", "Hotend temperature", lambda m: m["hotend_temp"], "hotendTemperatureRequired", ">=", "{:.0f} degC", 1, -273.15),
     ("SYS-011", "Melt flow", lambda m: m["flow"], "meltFlowRequired", ">=", "{:.0f} mm^3/s"),
@@ -154,10 +164,10 @@ CHECKS = [
 ]
 OPEN = [
     ("SYS-007", "Settling", "simulation of an axis with its controller"),
-    ("SYS-008", "Tracking", "simulation of an axis with its controller"),
     ("SYS-020", "Reference print time", "simulation of the toolpath with the motion limits of the design"),
     ("SYS-003", "Acceleration (the figure above is an estimate)", "simulation of the axis with a vibration model"),
     ("SYS-004", "Dimensional accuracy (the figure above is an estimate)", "simulation of the axis and a measurement of the frame"),
+    ("SYS-008", "Tracking (the figure above is an estimate; one axis simulated: 72 to 80 um at 10 m/s^2)", "simulation of the axis with its controller"),
     ("SYS-006", "Ringing (the figure above is an estimate)", "simulation of a move with and without the shaper"),
 ]
 
@@ -210,6 +220,7 @@ def main():
     rows.append(["Moving mass of the worst axis"] + [f"{results[n]['moving']:.2f} kg" for n in names])
     rows.append(["Acceleration the motors allow"] + [f"{results[n]['from_motors']:,.0f} m/s^2" for n in names])
     rows.append(["Acceleration the ringing limit allows"] + [f"{results[n]['from_ringing']:,.0f} m/s^2" for n in names])
+    rows.append(["Acceleration the tracking limit allows"] + [f"{results[n]['from_tracking']:,.0f} m/s^2" for n in names])
     rows.append(["Thermal growth over 10 K"] + [f"{results[n]['thermal'] * 1e6:.0f} um" for n in names])
     text = table(rows, header)
     open_text = table([[i, t, why] for i, t, why in OPEN], ["Requirement", "Title", "Decided by"])

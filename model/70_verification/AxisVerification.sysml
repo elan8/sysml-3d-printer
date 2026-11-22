@@ -4,7 +4,8 @@
  * Verification of one axis by simulation: the motion controller's firmware plays a 20 mm move at 300 mm/s and
  * 10,000 mm/s^2 on the axis plant (AxisPlant::BeltAxis), and the test bench monitor in the firmware measures how it
  * came out. The three driver files in verification/ run the same plant with a trapezoidal move, with a zero-vibration
- * input shaper tuned to the axis (62 Hz), and with a shaper tuned to the belt alone (69 Hz).
+ * input shaper tuned to the axis (62 Hz), and with a shaper tuned to the belt alone (69 Hz); a closed-loop stepper and a
+ * brushless servo are run the same way, with and without a shaper.
  */
 package AxisVerification {
   private import ScalarValues::*;
@@ -15,11 +16,13 @@ package AxisVerification {
   metadata def VerificationMethod { attribute kind : VerificationMethodKind; }
 
   /* What the controller drives and what the test bench measures. The firmware supplies the field angle and the current
-     of the stepper and the three measures; the plant supplies the final position. */
+     of a stepper, or the stator voltages of a servo, and the three measures; the plant supplies the final position. */
   part def AxisController {
     state logic {
       attribute fieldAngle : AngularMeasureValue = 0 [rad];
       attribute currentCommand : ElectricCurrentValue = 0 [A];
+      attribute voltageD : ElectricPotentialValue = 0 [V];      // the servo's stator voltages in the rotor frame
+      attribute voltageQ : ElectricPotentialValue = 0 [V];
       attribute settlingTime : Real = 0;           // s, from the end of the commanded motion to the last time outside 20 um
       attribute residualAmplitude : Real = 0;      // m, the largest deviation from the target after the commanded motion
       attribute trackingError : Real = 0;          // m, the largest distance from the commanded position during the move
