@@ -1,8 +1,8 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="8 0 944 549" role="img" aria-labelledby="title desc">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="8 0 944 579" role="img" aria-labelledby="title desc">
   <!-- SPDX-FileCopyrightText: 2026 Elan8 -->
   <!-- SPDX-License-Identifier: MIT -->
   <title id="title">Lead printer architecture</title>
-  <desc id="desc">The motion control subsystem takes a sliced job and commands the closed-loop motor drive, high-flow hotend and heated bed. Encoder and temperature feedback return to control. The drive moves the CoreXY structure. A 600 watt supply serves the electrical loads.</desc>
+  <desc id="desc">The motion control subsystem takes a sliced job and commands the closed-loop motor drive, high-flow hotend and heated bed. Encoder and temperature feedback return to control. The drive moves the CoreXY structure. A 600 watt supply powers the motor drive, hotend and heated bed (and the control board).</desc>
   <defs>
     <marker id="command" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
       <path d="M0 0 10 5 0 10Z" fill="#0b7181"/>
@@ -10,9 +10,12 @@
     <marker id="mechanical" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
       <path d="M0 0 10 5 0 10Z" fill="#963d15"/>
     </marker>
+    <marker id="power" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 0 10 5 0 10Z" fill="#8a6100"/>
+    </marker>
   </defs>
-  <rect width="960" height="549" fill="#fff"/>
-  <rect x="12" y="12" width="936" height="525" rx="16" fill="#f2f6f8" stroke="#b9cbd3"/>
+  <rect width="960" height="579" fill="#fff"/>
+  <rect x="12" y="12" width="936" height="555" rx="16" fill="#f2f6f8" stroke="#b9cbd3"/>
   <g font-family="DejaVu Sans, Arial, sans-serif" fill="#173143">
     <text x="36" y="48" font-size="25" font-weight="700">Lead printer architecture</text>
     <text x="924" y="48" text-anchor="end" font-size="16" fill="#425c6a">CoreXYClosedShaped</text>
@@ -65,11 +68,21 @@
     </g>
     <path d="M151 353V426" fill="none" stroke="#963d15" stroke-width="2.5" marker-end="url(#mechanical)"/>
     <text x="166" y="397" font-size="16" fill="#793309">Belt motion</text>
-    <path d="M353 390H388" stroke="#0b7181" stroke-width="2" marker-end="url(#command)"/>
-    <path d="M546 390H581" stroke="#0b7181" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#command)"/>
+    <g fill="none" stroke="#8a6100" stroke-width="2.5" marker-end="url(#power)">
+      <path d="M480 428V355"/>
+      <path d="M789 428V355"/>
+      <path d="M375 428V405H285V355"/>
+    </g>
+    <text x="494" y="397" font-size="16" fill="#6e4b00">Power</text>
+    <path d="M60 540H95" stroke="#0b7181" stroke-width="2" marker-end="url(#command)"/>
+    <path d="M250 540H285" stroke="#0b7181" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#command)"/>
+    <path d="M430 540H465" stroke="#8a6100" stroke-width="2.5" marker-end="url(#power)"/>
+    <path d="M580 540H615" stroke="#963d15" stroke-width="2.5" marker-end="url(#mechanical)"/>
     <g fill="#425c6a" font-size="16">
-      <text x="402" y="396">Command</text>
-      <text x="595" y="396">Feedback</text>
+      <text x="109" y="546">Command</text>
+      <text x="299" y="546">Feedback</text>
+      <text x="479" y="546">Power</text>
+      <text x="629" y="546">Mechanical motion</text>
     </g>
   </g>
 </svg>
