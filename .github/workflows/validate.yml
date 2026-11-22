@@ -14,9 +14,6 @@ permissions:
 
 env:
   DOC42_VERSION: "0.8.1"
-  # The Elan8 domain library the model is validated against, pinned to an exact commit: it has the stepper motor and the
-  # Modelica classes behind it. Replace the checkout by the release in config/domain-library.json once it is released.
-  DOMAIN_LIBRARIES_REF: 50578a9fa6f988417cf7c88d87226f08a5d4eede
 
 jobs:
   model:
@@ -26,13 +23,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Checkout the Elan8 domain libraries
-        uses: actions/checkout@v4
-        with:
-          repository: elan8/sysml-domain-libraries
-          ref: ${{ env.DOMAIN_LIBRARIES_REF }}
-          path: .libraries/sysml-domain-libraries
-
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
@@ -41,21 +31,35 @@ jobs:
       - name: Install numpy
         run: python3 -m pip install numpy
 
+      - name: Prepare the pinned domain libraries
+        run: |
+          domain_path="$(PYTHONPATH=scripts python3 -c 'from _spec42 import domain_library_path; print(domain_library_path())')"
+          echo "SPEC42_KPAR_LIBRARY_PATH_DOMAIN=$domain_path" >> "$GITHUB_ENV"
+
+          version="$(jq -r .version config/domain-library.json)"
+          repository="$(jq -r .repository config/domain-library.json)"
+          release="${repository%.git}/releases/download/v$version"
+          archive="elan8-domain-modelica-$version.zip"
+          modelica="$GITHUB_WORKSPACE/.libraries/modelica"
+          mkdir -p "$modelica"
+          curl --fail --silent --show-error --location --retry 3 "$release/$archive" --output "$modelica/$archive"
+          (
+            cd "$modelica"
+            sha256sum --check --ignore-missing "$GITHUB_WORKSPACE/.cache/SHA256SUMS-$version.txt"
+            unzip -q "$archive"
+          )
+          echo "ELAN8_MODELICA=$modelica" >> "$GITHUB_ENV"
+
       # Spec42 is downloaded, at the release pinned in .spec42-version, by the script.
       - name: Validate the model
-        env:
-          ELAN8_DOMAIN_LIBRARY: ${{ github.workspace }}/.libraries/sysml-domain-libraries
         run: python3 scripts/validate_spec42.py
 
       # The trade study, the generated files and the axis design are checked against the model.
       - name: Test
-        env:
-          ELAN8_DOMAIN_LIBRARY: ${{ github.workspace }}/.libraries/sysml-domain-libraries
         run: python3 -B -m unittest discover -s tests
 
       - name: Check the Modelica reference cases of the plant
         env:
-          ELAN8_MODELICA: ${{ github.workspace }}/.libraries/sysml-domain-libraries/modelica
           GH_TOKEN: ${{ github.token }}
         run: bash tests/modelica/run.sh
 

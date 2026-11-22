@@ -88,14 +88,12 @@ requirement has a derivation (`Traceability`) that names the system requirements
 You need Python 3.10 or later with numpy. The model is validated with [Spec42](https://github.com/elan8/spec42), which the
 scripts download at the release pinned in `.spec42-version`.
 
-The axis uses the stepper motor of the Elan8 domain library, which is not yet in a published release (the latest is 0.8.0).
-Until it is, check out [sysml-domain-libraries](https://github.com/elan8/sysml-domain-libraries) at commit
-`50578a9fa6f988417cf7c88d87226f08a5d4eede` or later and point the scripts at it:
+The axis uses the stepper motor from [Elan8 domain libraries v0.9.0](https://github.com/elan8/sysml-domain-libraries/releases/tag/v0.9.0).
+The Python scripts download and verify the SysML library pinned in `config/domain-library.json`. For the Modelica
+reference cases, extract `elan8-domain-modelica-0.9.0.zip` from the same release and set `ELAN8_MODELICA` to the directory
+that contains `Elan8/`.
 
 ```sh
-export ELAN8_DOMAIN_LIBRARY=<checkout>             # the directory that holds model/
-export ELAN8_MODELICA=<checkout>/modelica          # the directory that holds Elan8/
-
 python3 scripts/validate_spec42.py                 # 0 errors, 0 warnings
 python3 -B -m unittest discover -s tests           # the trade study, the generated files, the axis design
 python3 scripts/trade_study.py                     # the trade study, printed
@@ -109,6 +107,7 @@ What needs more:
   Elan8's simulation tool, and the Rust target `wasm32-unknown-unknown` to build the firmware.
 - **Rendering the documents** uses [Doc42](https://github.com/elan8/doc42-release). `doc42 check model` works without
   an account; `doc42 build` needs an Elan8 API token (`ELAN8_TOKEN`, created at [elan8.com](https://elan8.com)).
+  The [document build instructions](model/80_documents/README.md#build) show how to load the pinned domain library.
 
 Run42 and Doc42 are Elan8 products. The model, the scripts, the firmware, the plant models and the results in this repository
 are MIT-licensed, and everything except the verification run and the PDF rendering can be run with the free tools above.

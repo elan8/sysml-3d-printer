@@ -23,15 +23,15 @@ a simulator:
 ## Build
 
 [Doc42](https://github.com/elan8/doc42-release) renders the documents as PDF with the house template in `template/`.
-`doc42 list model` and `doc42 check model` need no account. To build, create an API token and set it as `ELAN8_TOKEN`:
+`doc42 list model` and `doc42 check model` need no account. With the released Doc42, create an API token and set it
+as `ELAN8_TOKEN` to build. Run these commands from the repository root to load the domain library pinned in
+`config/domain-library.json` (v0.9.0):
 
 ```sh
+domain_path="$(PYTHONPATH=scripts python3 -c 'from _spec42 import domain_library_path; print(domain_library_path())')"
+export SPEC42_KPAR_LIBRARY_PATH_DOMAIN="$domain_path"
 doc42 check model --workspace-root .
 doc42 build model --workspace-root . --doc PrinterDocuments::sds --out generated/documents
 ```
 
 Rendered PDFs go to `generated/documents/`; never commit them. CI builds all four on every run.
-
-Doc42 0.8.1 embeds version 0.8.0 of the Elan8 domain library, which does not have the stepper motor that
-`model/70_verification/AxisPlant.sysml` uses, so `doc42 check` reports unresolved references in that file, as warnings. They
-disappear when Doc42 embeds a newer domain library. The documents do not read the plant.

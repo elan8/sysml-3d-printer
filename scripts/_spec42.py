@@ -125,7 +125,12 @@ def find_spec42(explicit: str | None = None) -> str:
 
 
 def domain_library_args() -> list[str]:
-    """`--kpar-library-path domain=<dir>` for the domain library version in config/domain-library.json.
+    """Select this project's domain library for Spec42."""
+    return ["--kpar-library-path", f"domain={domain_library_path()}"]
+
+
+def domain_library_path() -> Path:
+    """Resolve the domain library version in config/domain-library.json.
 
     The pinned Spec42 release bundles an older domain library, so this project uses the release it names:
     the KPAR is downloaded from that release, checked against the checksum the release publishes, and
@@ -137,8 +142,7 @@ def domain_library_args() -> list[str]:
 
     override = os.environ.get("ELAN8_DOMAIN_LIBRARY")
     if override:
-        # A checkout of the domain library (the directory that holds model/), for a class that is not released yet.
-        return ["--kpar-library-path", f"domain={override}"]
+        return Path(override)
     config = json.loads((REPO_ROOT / "config" / "domain-library.json").read_text(encoding="utf-8"))
     version, repository = config["version"], config["repository"].removesuffix(".git")
     cache = REPO_ROOT / ".cache"
@@ -164,4 +168,4 @@ def domain_library_args() -> list[str]:
         with zipfile.ZipFile(archive) as bundle:
             bundle.extractall(staging)
         staging.rename(target)
-    return ["--kpar-library-path", f"domain={target}"]
+    return target
