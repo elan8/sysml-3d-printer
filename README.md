@@ -32,6 +32,7 @@ decide how fast the printer can go before the vibration shows in the part.
 | Architecture trade study, generated from the model | `docs/trade-study.md`, `scripts/trade_study.py` |
 | Decision record for the lead candidate | `records/ADR-001-lead-architecture.md` |
 | One axis: stepper, pulley, belt and carriage, with Modelica reference cases | `model/70_verification/AxisPlant.sysml`, `tests/modelica`, `docs/axis-model.md` |
+| The axis controller firmware and its verification by simulation (SYS-006, 007, 008) | `firmware/axis-controller`, `model/70_verification/AxisVerification.sysml`, `verification`, `docs/axis-verification.md` |
 
 Each system requirement constrains a property of the specification against a number in `Limits`, and
 `Traceability` links it to the stakeholder needs it serves.
@@ -47,7 +48,9 @@ Each system requirement constrains a property of the specification against a num
    (`docs/axis-model.md`). The stepper's own holding stiffness lowers the first resonance of the lead candidate from the
    trade study's 69 Hz to 62 Hz.
 4. **Verification** with Run42: settling, tracking and ringing of an axis with the motion controller's firmware in
-   the loop, with and without input shaping; then the heater control and the runaway monitor.
+   the loop (`docs/axis-verification.md`). Without input shaping the carriage never settles within 20 um; a shaper
+   leaves 6 um and is forgiving of an 11 percent error in the resonance it is tuned to. Next: a closed-loop stepper and a
+   servo, then the heater control and the runaway monitor.
 5. **Documents** generated with Doc42, with the verdicts and plots in them.
 
 ## The trade study

@@ -18,7 +18,7 @@ package AxisPlant {
 
   part def BeltAxis {
     doc /*
-     * One axis: the stepper motor turns a 20-tooth, 2 mm pitch pulley (6.37 mm radius) that drives the carriage
+     * One axis: the stepper motor turns a 20-tooth, 2 mm pitch pulley (6.3662 mm radius, so 80 microsteps per mm) that drives the carriage
      * through the belt. The belt is a spring between the pulley and the carriage; the motor's own holding stiffness
      * and the rotor's inertia are part of the axis (the Modelica class of the motor has them). The motor's inputs are
      * the commanded field angle and the peak phase current, which a motion controller provides.
@@ -34,7 +34,7 @@ package AxisPlant {
       attribute :>> chopperGain = 500 [ohm];
     }
     part pulley : RollingWheel {
-      attribute :>> radius = 6.37 [mm];
+      attribute :>> radius = 6.3662 [mm];
     }
     part belt : Spring {
       attribute :>> stiffness = 1.26e5 [N / m];

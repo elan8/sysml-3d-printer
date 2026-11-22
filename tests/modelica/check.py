@@ -23,8 +23,8 @@ def check(name, worst, limit, what):
 
 
 # The axis of the lead candidate: a 0.67 kg carriage (0.55 kg of carriage and 0.12 kg of hotend) on a belt path of
-# 1.26e5 N/m (the figures of the model), a 20-tooth 2 mm pulley (radius 6.37 mm) and a NEMA 17 stepper.
-M, K_BELT, R_PULLEY, X0 = 0.67, 1.26e5, 0.00637, 2e-4
+# 1.26e5 N/m (the figures of the model), a 20-tooth 2 mm pulley (radius 6.3662 mm) and a NEMA 17 stepper.
+M, K_BELT, R_PULLEY, X0 = 0.67, 1.26e5, 0.0063662, 2e-4
 R_PH, L_PH, KT, NR, J_ROTOR, KC, I_CMD, V_SUPPLY = 1.6, 3.4e-3, 0.3, 50, 5.7e-6, 500.0, 1.5, 24.0
 
 
