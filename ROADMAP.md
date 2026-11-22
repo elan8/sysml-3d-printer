@@ -25,9 +25,14 @@ Close SYS-020, the reference print time, which is the one system requirement not
 as it is: the 100 x 100 x 20 mm bracket in at most 60 minutes. Whether that is the right reference part is a stakeholder
 question for the team lead, not something to change because a simulation is slow.
 
-1. **Measure first.** Slice the bracket, simulate one layer with the released Run42, and record the wall-clock time per
-   simulated second. This one number decides which route follows.
-2. **Route A, if the whole print is affordable:** simulate all of it, as a manual or nightly job whose result is committed,
+1. **Measure first (done for one axis).** The released Run42 beta, running the closed-loop axis case with its firmware
+   sampling at 20 kHz, takes about 20 s of fixed time per run plus about 0.9 s per simulated second (measured at horizons of
+   0.3, 2 and 4.5 s, three runs each). At that rate 3,600 s of printing is roughly an hour for one axis; the CoreXY plant has
+   two motors, so expect a few hours. This is an estimate for the real toolpath, not a measurement of it: the firmware has
+   no toolpath executor yet, and a single advance of the simulation is limited to 100,000 ticks (5 s at 20 kHz), so a long
+   print has to be run in windows or the limit raised. Almost all of the fixed time is the Modelica compiler resolving the
+   Modelica Standard Library about ten times per run.
+2. **Route A, if the whole print is affordable (it looks so):** simulate all of it, as a manual or nightly job whose result is committed,
    so there is nothing to extrapolate.
 3. **Route B, if it is not:** compute the print time with a fast model of the move planner (acceleration, junction speeds,
    per-segment time), and check that model against the full simulation on a sample of layers, corners and travel moves.
