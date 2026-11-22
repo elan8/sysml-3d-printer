@@ -20,6 +20,7 @@ package MotionControlSystem {
     attribute maxStepRate : FrequencyValue;           // total step pulses per second the controller can generate per motor
     attribute runawayDetectionTime : DurationValue;
     attribute power : PowerValue;
+    attribute mass : MassValue;                       // the controller board with its drivers, without wiring (estimate)
     attribute cost : Real;                            // euro
   }
 
@@ -31,6 +32,7 @@ package MotionControlSystem {
     attribute :>> maxStepRate = 30 [kilo * Hz];
     attribute :>> runawayDetectionTime = 40 [s];
     attribute :>> power = 10 [W];
+    attribute :>> mass = 0.12 [kg];
     attribute :>> cost = 25;
   }
 
@@ -42,6 +44,7 @@ package MotionControlSystem {
     attribute :>> maxStepRate = 200 [kilo * Hz];
     attribute :>> runawayDetectionTime = 20 [s];
     attribute :>> power = 12 [W];
+    attribute :>> mass = 0.15 [kg];
     attribute :>> cost = 45;
   }
 
@@ -53,6 +56,7 @@ package MotionControlSystem {
     attribute :>> maxStepRate = 200 [kilo * Hz];
     attribute :>> runawayDetectionTime = 8 [s];
     attribute :>> power = 15 [W];
+    attribute :>> mass = 0.2 [kg];
     attribute :>> cost = 60;
     part firmware : PrinterSoftware::PrinterFirmware;
   }

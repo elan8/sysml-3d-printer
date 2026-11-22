@@ -42,8 +42,8 @@ need a simulation), and `docs/axis-verification.md` simulates one axis with each
   with a trapezoidal move and no shaper, the closed-loop stepper settles in 40 ms where the open-loop one never
   does (the derivative term of its position loop is the damping).
 - **Servos and a steel frame are the most accurate but not worth it.** The error budget is 40 um instead of 71
-  um, but the bill of parts is 887 EUR against 750 (SYS-019) and the servos' peak power overloads the 600 W
-  supply by 2 percent (SYS-014). On the same axis a servo does not do better than a closed-loop stepper in the
+  um, but the bill of parts is 887 EUR against 750 (SYS-019), the servos' peak power overloads the 600 W
+  supply by 2 percent (SYS-014), and the heavier frame takes the printer to 15.2 kg against 14 (SYS-018). On the same axis a servo does not do better than a closed-loop stepper in the
   simulation (2.4 against 1.3 um of residual vibration with a shaper, 73 against 72 um of tracking error): the
   belt, not the drive, decides.
 - **The thermal error is the biggest term of the error budget.** The frame grows 58 um over a 10 K warm-up on
@@ -63,3 +63,11 @@ need a simulation), and `docs/axis-verification.md` simulates one axis with each
 
 SYS-007 (settling), SYS-008 (tracking) and SYS-020 (reference print time) are decided by simulation, not by the
 architecture.
+
+- **The cost limit of 750 EUR is our reading of "a few hundred euros" (USR-009).** The team lead has not confirmed
+  it; the lead candidate costs 587 EUR, so it would also meet a limit of 600 EUR.
+- **ABS in a shared office is not covered.** The context has no dedicated ventilation. Fume emission, an enclosure
+  and an operator warning are open: the noise limit and the heater watchdog alone do not address them.
+- **The belt stiffness, the moving mass and the shaper tuning are assumed values**, not measurements. How the
+  decision changes when they vary is the next study, and the results above hold for the nominal values only.
+- **The masses of the bed and the controller are estimates** (1.2 kg and 0.15 kg for the lead candidate).

@@ -33,6 +33,31 @@ interested in model-based systems engineering with control engineering in it, th
 
 See the [system overview](docs/system-overview/README.md) for the lead architecture and its six subsystems.
 
+## The decision in one minute
+
+**Requirement → alternatives → choice → simulation → evidence.** The team needs functional prototypes that are fast,
+accurate, quiet and cheap. Six candidate architectures are compared against the system requirements the architecture
+decides, with every number read from the model ([trade study](docs/trade-study.md)):
+
+| Candidate | Requirements failed | Bill of parts |
+| --- | ---: | ---: |
+| **CoreXY, closed-loop steppers, input shaping (chosen)** | **0** | **587 EUR** |
+| CoreXY, open-loop steppers, input shaping | 1 (noise) | 507 EUR |
+| CoreXY, steel frame and servos, input shaping | 3 (power, mass, cost) | 887 EUR |
+| CoreXY, basic controller | 7 | 503 EUR |
+| Bed-slinger, closed-loop steppers, input shaping | 4 | 547 EUR |
+| Budget bed-slinger | 13 | 343 EUR |
+
+These counts cover the requirements the architecture decides, not a physical verification of every requirement
+([ADR-001](records/ADR-001-lead-architecture.md) gives the reasoning and what is still open). The choice is then tested
+by simulation with the real controller firmware in the loop. On a blended corner taken at 75 mm/s (about 8 m/s^2) the peak tracking error is
+**137.7 um without input shaping (fails the 100 um limit) and 67.7 um with it (passes)**
+([CoreXY toolpath verification](docs/corexy-study/README.md)).
+
+![Tracking error of the corner with and without input shaping](docs/corexy-study/motion-errors.svg)
+
+All figures are results of the model and its simulations under stated assumptions, not measurements of a built printer.
+
 ## What you can learn from it
 
 The analysis produced results that were not obvious from the requirements:
@@ -61,12 +86,17 @@ diagrams are read from the model, so they cannot drift from it.
 
 | Document | Number | Answers |
 | --- | --- | --- |
-| Customer Requirements Specification | FDM-CRS-001 | What does the team need? Stakeholders, scenarios, 12 customer requirements, the assumptions behind them |
-| System Requirements Specification | FDM-SRS-001 | What shall the printer do, and how well? 20 measurable requirements, each with the need it derives from, and why that set is complete |
-| System Design Specification | FDM-SDS-001 | How is it designed to do it? Six subsystems and their alternatives, the architecture, the trade study of six candidates, the model of one axis, the decision |
-| Verification Report | FDM-VVR-001 | What has the simulation shown? Seven controllers on three drives, the acceleration sweep, the requirements verification matrix, the open points |
+| [Customer Requirements Specification](https://elan8.github.io/sysml-3d-printer/FDM-CRS-001.pdf) | FDM-CRS-001 | What does the team need? Stakeholders, scenarios, 12 customer requirements, the assumptions behind them |
+| [System Requirements Specification](https://elan8.github.io/sysml-3d-printer/FDM-SRS-001.pdf) | FDM-SRS-001 | What shall the printer do, and how well? 20 measurable requirements, each with the need it derives from, and why that set is complete |
+| [System Design Specification](https://elan8.github.io/sysml-3d-printer/FDM-SDS-001.pdf) | FDM-SDS-001 | How is it designed to do it? Six subsystems and their alternatives, the architecture, the trade study of six candidates, the model of one axis, the decision |
+| [Verification Report](https://elan8.github.io/sysml-3d-printer/FDM-VVR-001.pdf) | FDM-VVR-001 | What has the simulation shown? Seven controllers on three drives, the acceleration sweep, the requirements verification matrix, the open points |
 
-CI builds the documents on every run and keeps the PDFs as the `documents` artifact of the run. See
+**Read the PDFs:** [CRS](https://elan8.github.io/sysml-3d-printer/FDM-CRS-001.pdf),
+[SRS](https://elan8.github.io/sysml-3d-printer/FDM-SRS-001.pdf),
+[SDS](https://elan8.github.io/sysml-3d-printer/FDM-SDS-001.pdf) and
+[VVR](https://elan8.github.io/sysml-3d-printer/FDM-VVR-001.pdf), or the
+[index page](https://elan8.github.io/sysml-3d-printer/) that records the commit and Doc42 version they were built from.
+CI rebuilds and republishes them on every push to `main`. See
 [`model/80_documents/README.md`](model/80_documents/README.md) to build them yourself.
 
 ## What is in the repository

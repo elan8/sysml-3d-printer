@@ -138,7 +138,7 @@ def metrics(model, designs, limits, reference):
         "supply": supply["ratedPower"], "runaway": control["runawayDetectionTime"], "noise": drive["noiseAt1m"],
         "footprint": max(structure["footprintWidth"] / limits["footprintWidthLimit"],
                          structure["footprintDepth"] / limits["footprintDepthLimit"]),
-        "mass": structure["mass"] + drive["mass"] + hotend["mass"] + supply["mass"],
+        "mass": structure["mass"] + drive["mass"] + hotend["mass"] + bed["mass"] + supply["mass"] + control["mass"],
         "cost": sum(d[c]["cost"] for c in d),
     }
 
