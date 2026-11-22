@@ -2,9 +2,9 @@
   "schema_version": 1,
   "root": "CoreXYPlant::XYStage",
   "state": "CoreXYVerification::Controller::logic",
-  "case": "CoreXYVerification::diagonalMove",
+  "case": "CoreXYVerification::trackToolpath",
   "wasm": {
-    "module": "../build/corexy-diagonal.wasm",
+    "module": "../build/corexy/diagonal/firmware.wasm",
     "fuel": 2000000,
     "memory_bytes": 2097152,
     "exports": {
@@ -52,6 +52,16 @@
         "attribute": "CoreXYVerification::Controller::logic::trackingError",
         "index": 4,
         "unit": null
+      },
+      {
+        "attribute": "CoreXYVerification::Controller::logic::targetX",
+        "index": 9,
+        "unit": "m"
+      },
+      {
+        "attribute": "CoreXYVerification::Controller::logic::targetY",
+        "index": 10,
+        "unit": "m"
       }
     ],
     "provides": [

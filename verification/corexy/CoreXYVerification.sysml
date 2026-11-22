@@ -21,6 +21,8 @@ package CoreXYVerification {
       attribute settlingTime : Real = 0;        // s
       attribute residualAmplitude : Real = 0;   // m
       attribute trackingError : Real = 0;       // m
+      attribute targetX : LengthValue;
+      attribute targetY : LengthValue;
       attribute finalX : LengthValue;
       attribute finalY : LengthValue;
       entry;
@@ -29,8 +31,8 @@ package CoreXYVerification {
     }
   }
 
-  verification diagonalMove {
-    doc /* The shaped feed move travels 20 mm in the ratio X:Y = 4:3. The monitor uses Euclidean distance in XY. */
+  verification trackToolpath {
+    doc /* The firmware executes a selected straight move or corner. The monitor uses Euclidean distance in XY. */
     @CoreXYVerification::VerificationMethod { kind = CoreXYVerification::VerificationMethodKind::test; }
     subject controller : Controller;
     objective {
@@ -43,8 +45,10 @@ package CoreXYVerification {
     assert constraint ringsLittle { controller.logic.residualAmplitude <= 0.00005 }
     assert constraint tracks { controller.logic.trackingError <= 0.0001 }
     assert constraint arrives {
-      controller.logic.finalX >= 0.01598 [m] and controller.logic.finalX <= 0.01602 [m]
-        and controller.logic.finalY >= 0.01198 [m] and controller.logic.finalY <= 0.01202 [m]
+      controller.logic.finalX >= controller.logic.targetX - 0.00002 [m]
+        and controller.logic.finalX <= controller.logic.targetX + 0.00002 [m]
+        and controller.logic.finalY >= controller.logic.targetY - 0.00002 [m]
+        and controller.logic.finalY <= controller.logic.targetY + 0.00002 [m]
     }
   }
 }

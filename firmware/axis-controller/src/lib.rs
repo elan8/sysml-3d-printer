@@ -9,7 +9,7 @@
 //! phase current and the field leads the rotor by a quarter cycle, in either direction. With the feature `servo` the
 //! motor is a brushless servo: the same PD loop gives a torque current, and a PI current loop with decoupling turns the
 //! d and q currents it measures into the stator voltages, limited to the supply. The controller samples every 50 us.
-//! With `corexy`, the same closed-loop drive runs in each motor's belt coordinates for a 4:3 diagonal XY move.
+//! The CoreXY variants run the same closed-loop drive in each motor's belt coordinates for lines and a rounded corner.
 //!
 //! The guest also holds a test bench monitor, which is not part of the printer's firmware and which the controller never
 //! reads: it is given the true carriage position and measures how well the move came out. After the commanded motion
@@ -29,8 +29,6 @@ const MICROSTEPS_PER_METRE: f64 = 80_000.0;
 const FIELD_PER_MICROSTEP: f64 = PI / 32.0; // a quarter cycle per full step, 16 microsteps per full step
 const CURRENT: f64 = 1.5; // A, peak phase current
 const BAND: f64 = 20e-6; // m, the band the carriage has to settle into
-const X_COMPONENT: f64 = 0.8;
-const Y_COMPONENT: f64 = 0.6;
 
 #[cfg(feature = "shaper6150")]
 const SHAPER_FREQUENCY: f64 = 61.50; // Hz, the servo axis
@@ -214,11 +212,11 @@ fn closed_stepper(command: f64, speed_command: f64, encoder: f64, speed: f64) ->
     )
 }
 
-fn monitor(s: &mut State, t: f64, tracking_error: f64, deviation: f64) {
-    if t >= START && t <= done_time() {
+fn monitor(s: &mut State, t: f64, end: f64, tracking_error: f64, deviation: f64) {
+    if t >= START && t <= end {
         s.tracking = s.tracking.max(tracking_error);
     }
-    if t > done_time() {
+    if t > end {
         if deviation > BAND {
             s.last_outside = t;
         }
@@ -226,26 +224,98 @@ fn monitor(s: &mut State, t: f64, tracking_error: f64, deviation: f64) {
     }
 }
 
+// The corner blends two 20 mm legs. Each end of the blend is 0.5 mm from the nominal corner.
+// A quadratic Bézier has continuous velocity at the 75 mm/s entry and exit, with 7.95 m/s² inside the blend.
+const BLEND: f64 = 0.0005;
+const JUNCTION_SPEED: f64 = 0.075;
+const BLEND_TIME: f64 = 2.0 * BLEND / JUNCTION_SPEED;
+const LEG: f64 = DISTANCE - BLEND;
+const RAMP_UP: f64 = SPEED / ACCELERATION;
+const RAMP_DOWN: f64 = (SPEED - JUNCTION_SPEED) / ACCELERATION;
+const RAMP_UP_DISTANCE: f64 = 0.5 * SPEED * RAMP_UP;
+const RAMP_DOWN_DISTANCE: f64 = 0.5 * (SPEED + JUNCTION_SPEED) * RAMP_DOWN;
+const CRUISE_TIME: f64 = (LEG - RAMP_UP_DISTANCE - RAMP_DOWN_DISTANCE) / SPEED;
+const APPROACH_TIME: f64 = RAMP_UP + CRUISE_TIME + RAMP_DOWN;
+const CORNER_TIME: f64 = 2.0 * APPROACH_TIME + BLEND_TIME;
+
+fn approach(t: f64) -> f64 {
+    if t <= 0.0 {
+        0.0
+    } else if t < RAMP_UP {
+        0.5 * ACCELERATION * t * t
+    } else if t < RAMP_UP + CRUISE_TIME {
+        RAMP_UP_DISTANCE + SPEED * (t - RAMP_UP)
+    } else if t < APPROACH_TIME {
+        let time_left = APPROACH_TIME - t;
+        LEG - JUNCTION_SPEED * time_left - 0.5 * ACCELERATION * time_left * time_left
+    } else {
+        LEG
+    }
+}
+
+fn corexy_path(t: f64) -> (f64, f64) {
+    if cfg!(feature = "corexy_corner") {
+        if t <= APPROACH_TIME {
+            return (approach(t), 0.0);
+        }
+        if t < APPROACH_TIME + BLEND_TIME {
+            let u = (t - APPROACH_TIME) / BLEND_TIME;
+            return (LEG + BLEND * (2.0 * u - u * u), BLEND * u * u);
+        }
+        return (DISTANCE, DISTANCE - approach(CORNER_TIME - t));
+    }
+
+    let distance = profile(t);
+    if cfg!(feature = "corexy_x") {
+        (distance, 0.0)
+    } else if cfg!(feature = "corexy_y") {
+        (0.0, distance)
+    } else if cfg!(feature = "corexy_opposite") {
+        (0.8 * distance, -0.6 * distance)
+    } else {
+        (0.8 * distance, 0.6 * distance)
+    }
+}
+
+fn corexy_command(t: f64) -> (f64, f64) {
+    let (x, y) = corexy_path(t - START);
+    if SHAPER_FREQUENCY > 0.0 {
+        let (delayed_x, delayed_y) = corexy_path(t - START - 0.5 / SHAPER_FREQUENCY);
+        (0.5 * (x + delayed_x), 0.5 * (y + delayed_y))
+    } else {
+        (x, y)
+    }
+}
+
+fn motion_end() -> f64 {
+    if cfg!(feature = "corexy_corner") {
+        done_time() + (CORNER_TIME - move_time())
+    } else {
+        done_time()
+    }
+}
+
 fn corexy_tick(s: &mut State, t: f64, dt: f64) {
-    let command = commanded(t);
-    let speed_command = (commanded(t + dt) - command) / dt;
-    let belt_a = X_COMPONENT + Y_COMPONENT;
-    let belt_b = X_COMPONENT - Y_COMPONENT;
+    let (x, y) = corexy_command(t);
+    let (next_x, next_y) = corexy_command(t + dt);
+    let vx = (next_x - x) / dt;
+    let vy = (next_y - y) / dt;
     (s.field_angle, s.current) = closed_stepper(
-        belt_a * command, belt_a * speed_command, s.encoder, (s.encoder - s.encoder_before) / dt,
+        x + y, vx + vy, s.encoder, (s.encoder - s.encoder_before) / dt,
     );
     (s.field_angle_b, s.current_b) = closed_stepper(
-        belt_b * command, belt_b * speed_command, s.encoder_b, (s.encoder_b - s.encoder_b_before) / dt,
+        x - y, vx - vy, s.encoder_b, (s.encoder_b - s.encoder_b_before) / dt,
     );
     s.encoder_before = s.encoder;
     s.encoder_b_before = s.encoder_b;
 
-    let distance_to = |target: f64| {
-        let dx = s.position - X_COMPONENT * target;
-        let dy = s.position_y - Y_COMPONENT * target;
+    let distance_to = |target_x: f64, target_y: f64| {
+        let dx = s.position - target_x;
+        let dy = s.position_y - target_y;
         sqrt(dx * dx + dy * dy)
     };
-    monitor(s, t, distance_to(command), distance_to(DISTANCE));
+    let (final_x, final_y) = corexy_path(motion_end());
+    monitor(s, t, motion_end(), distance_to(x, y), distance_to(final_x, final_y));
 }
 
 #[no_mangle]
@@ -326,7 +396,7 @@ pub extern "C" fn advance(target: i64) -> i32 {
             s.field_angle = round(command * MICROSTEPS_PER_METRE) * FIELD_PER_MICROSTEP;
             s.current = CURRENT;
         }
-        monitor(s, t, abs(s.position - command), abs(s.position - DISTANCE));
+        monitor(s, t, done_time(), abs(s.position - command), abs(s.position - DISTANCE));
     }
     0
 }
@@ -336,6 +406,7 @@ pub extern "C" fn receive(_: i32) -> i32 {
 }
 /// 0 field angle (rad); 1 phase current (A); 2 settling time (s); 3 residual vibration (m); 4 tracking error (m);
 /// 5 and 6 the d and q stator voltages of the servo (V); 7 and 8 the CoreXY B field angle and phase current.
+/// 9 and 10 are the planned CoreXY endpoint in metres.
 #[no_mangle]
 pub extern "C" fn sample(index: i32) -> f64 {
     let s = state();
@@ -343,8 +414,8 @@ pub extern "C" fn sample(index: i32) -> f64 {
         0 => s.field_angle,
         1 => s.current,
         2 => {
-            if s.last_outside > done_time() {
-                s.last_outside - done_time()
+            if s.last_outside > motion_end() {
+                s.last_outside - motion_end()
             } else {
                 0.0
             }
@@ -355,6 +426,8 @@ pub extern "C" fn sample(index: i32) -> f64 {
         6 => s.voltage_q,
         7 if cfg!(feature = "corexy") => s.field_angle_b,
         8 if cfg!(feature = "corexy") => s.current_b,
+        9 if cfg!(feature = "corexy") => corexy_path(motion_end()).0,
+        10 if cfg!(feature = "corexy") => corexy_path(motion_end()).1,
         _ => f64::NAN,
     }
 }

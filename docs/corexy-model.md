@@ -31,15 +31,19 @@ From the repository root, run:
 
 ```sh
 rustup target add wasm32-unknown-unknown
-python3 scripts/verify_corexy.py
+python3 scripts/verify_corexy.py --suite
+python3 scripts/report_corexy.py
 ```
 
-The script builds the Wasm guest and writes the Run42 verdict, traces and plot to `build/corexy/`. The diagonal case
-runs in a workspace separate from the existing one-axis cases, so only the selected case produces a verdict.
+The first script builds the Wasm guests and writes the Run42 verdict and traces for each case to `build/corexy/`.
+Use `--case x` to run just one named scenario or `--jobs 3` to run up to three simulations concurrently.
+The toolpath case runs in a workspace separate from the existing one-axis cases. The second script, which needs
+NumPy and Matplotlib, generates the [design study and charts](corexy-study/README.md) from the six recorded traces.
+Run it after all six cases have produced an engineering verdict. A failed requirement makes the verification
+command return a nonzero status and still produces evidence for the report.
 
-With Run42 development revision `02ede8f`, the diagonal case passed all four assertions. The trace sampled at 50 µs
-showed a 65.7 µm peak planar tracking error, a 3.0 µm peak error after the move, and a 0.4 µm endpoint error. The carriage
-was within the 20 µm settling band when the command ended.
+To render the study PDF with Doc42, set `SPEC42_KPAR_LIBRARY_PATH_DOMAIN` to the unpacked v0.9.0 domain library
+directory and run `doc42 build docs/corexy-study --workspace-root . --doc CoreXYStudy::report --out generated/documents`.
 
 The Modelica reference check in `tests/modelica/run.sh` holds the pulleys at unequal fixed positions. Starting both
 masses at rest, it compares the X and Y trajectories with the closed-form spring response about the transformed

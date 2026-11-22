@@ -38,6 +38,7 @@ decide how fast the printer can go before the vibration shows in the part.
 | One axis: stepper, pulley, belt and carriage, with Modelica reference cases | `model/70_verification/AxisPlant.sysml`, `tests/modelica`, `docs/axis-model.md` |
 | The axis controller firmware (three drives) and its verification by simulation (SYS-006, 007, 008) | `firmware/axis-controller`, `model/70_verification/AxisVerification.sysml`, `verification`, `scripts/axis_design.py`, `docs/axis-verification.md` |
 | Two-motor CoreXY plant and diagonal verification | [CoreXY motion model](docs/corexy-model.md) |
+| Directional moves and corner design study with its simulation data | [CoreXY toolpath verification](docs/corexy-study/README.md) |
 
 Each system requirement constrains a property of the specification against a number in `Limits`, and
 `Traceability` links it to the stakeholder needs it serves.

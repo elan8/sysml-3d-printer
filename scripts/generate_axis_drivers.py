@@ -73,17 +73,19 @@ def driver(module, plant="AxisPlant::BeltAxis", drive="open"):
     }
 
 
-def corexy_driver():
+def corexy_driver(module_path="../build/corexy/diagonal/firmware.wasm"):
     state = "CoreXYVerification::Controller::logic"
     configuration = driver("corexy-diagonal.wasm", "CoreXYPlant::XYStage")
+    configuration["wasm"]["module"] = module_path
     configuration["state"] = state
-    configuration["case"] = "CoreXYVerification::diagonalMove"
+    configuration["case"] = "CoreXYVerification::trackToolpath"
     configuration["wasm"]["observations"] = [
         {"attribute": f"{state}::{name}", "index": index, "unit": unit}
         for name, index, unit in (
             ("fieldAngleA", 0, "rad"), ("currentCommandA", 1, "A"),
             ("fieldAngleB", 7, "rad"), ("currentCommandB", 8, "A"),
             ("settlingTime", 2, None), ("residualAmplitude", 3, None), ("trackingError", 4, None),
+            ("targetX", 9, "m"), ("targetY", 10, "m"),
         )
     ]
     configuration["wasm"]["provides"] = [
