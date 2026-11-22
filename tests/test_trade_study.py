@@ -67,8 +67,17 @@ class Candidates(unittest.TestCase):
         self.assertEqual(self.failures("CoreXYWideServoShaped"), ["SYS-014", "SYS-019"])
         self.assertLess(servo["budget"], 0.6 * lead["budget"])
 
+    def test_the_belt_not_the_motor_limits_the_acceleration_of_every_shaped_candidate(self):
+        # the Run42 sweep of docs/axis-verification.md: no drive loses the move, the tracking error grows with m a / k
+        for name in ("CoreXYClosedShaped", "CoreXYOpenShaped", "CoreXYWideServoShaped"):
+            result = self.results[name]
+            self.assertLess(result["from_tracking"], result["from_motors"] / 3, name)
+            self.assertAlmostEqual(result["acceleration"], min(result["from_ringing"], result["from_tracking"]))
+        lead = self.results["CoreXYClosedShaped"]
+        self.assertTrue(12 < lead["from_tracking"] < 16, lead["from_tracking"])
+
     def test_a_bed_slinger_cannot_reach_the_resonance_or_the_footprint_whatever_the_electronics(self):
-        self.assertEqual(self.failures("SlingerClosedShaped"), ["SYS-005", "SYS-017"])
+        self.assertEqual(self.failures("SlingerClosedShaped"), ["SYS-003", "SYS-005", "SYS-008", "SYS-017"])
         slinger, lead = self.results["SlingerClosedShaped"], self.results["CoreXYClosedShaped"]
         self.assertLess(slinger["resonance"], 0.6 * lead["resonance"])
 

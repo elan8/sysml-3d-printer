@@ -4,7 +4,7 @@
   "state": "AxisVerification::AxisController::logic",
   "case": "AxisVerification::moveTest",
   "wasm": {
-    "module": "../build/axis-trapezoid.wasm",
+    "module": "../build/axis-open-mistuned.wasm",
     "fuel": 2000000,
     "memory_bytes": 2097152,
     "exports": {
@@ -42,6 +42,16 @@
         "attribute": "AxisVerification::AxisController::logic::trackingError",
         "index": 4,
         "unit": null
+      },
+      {
+        "attribute": "AxisVerification::AxisController::logic::voltageD",
+        "index": 5,
+        "unit": "V"
+      },
+      {
+        "attribute": "AxisVerification::AxisController::logic::voltageQ",
+        "index": 6,
+        "unit": "V"
       }
     ],
     "provides": [

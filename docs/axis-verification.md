@@ -12,28 +12,52 @@ move), and that the move ends within 20 um of 20 mm.
 RUN42=<run42> bash scripts/verify_axis.sh     # verdicts, traces and plots in build/axis/
 ```
 
-## Three controllers on the same plant
+## Seven controllers on three drives
+
+The firmware has three drives, each run without a shaper and with one tuned to its own axis (the open-loop stepper also with
+one tuned to the belt alone): an **open-loop stepper** (the field follows the step count at a constant 1.5 A), a
+**closed-loop stepper** (an encoder, a PD position loop that sets the current, the field a quarter cycle ahead of the rotor)
+and a **brushless servo** (the same PD loop gives a torque current, a PI current loop with decoupling sets the stator
+voltages, limited to the supply; the library's dq-frame PMSM model). The servo axis is `AxisPlant::ServoAxis`.
 
 | Controller | Residual vibration | Settling | Tracking error | Final error | Verdict |
 | --- | --- | --- | --- | --- | --- |
-| Trapezoidal move, no shaper | 47.6 um | never within 20 um (200 ms) | 149 um | -43 um | **fails** settling, tracking and arrival |
-| Zero-vibration shaper at 62.08 Hz (the axis) | 6.4 um | 0 ms | 80 um | -6 um | passes |
-| Zero-vibration shaper at 69.02 Hz (the belt alone) | 10.1 um | 0 ms | 90 um | -8 um | passes |
+| Open-loop stepper, trapezoid | 47.6 um | never (200 ms) | 149 um | -43 um | **fails** settling, tracking, arrival |
+| Open-loop stepper, shaper 62.08 Hz | 6.4 um | 0 ms | 80 um | -6 um | passes |
+| Open-loop stepper, shaper 69.02 Hz (belt alone) | 10.1 um | 0 ms | 90 um | -8 um | passes |
+| Closed-loop stepper, trapezoid | 40.6 um | 40 ms | 127 um | 0 um | **fails** tracking |
+| Closed-loop stepper, shaper 63.5 Hz | 1.2 um | 0 ms | 71 um | 0 um | passes |
+| Servo, trapezoid | 36.9 um | 97 ms | 137 um | -9 um | **fails** settling and tracking |
+| Servo, shaper 61.5 Hz | 2.4 um | 0 ms | 72 um | 0 um | passes |
 
-- **Without a shaper the axis rings for the rest of the run.** The residual vibration is just under the ringing limit
-  (47.6 um against 50 um; the trade study's estimate was 51 um and failed it), but it decays only slowly, so the carriage
-  never settles within 20 um and it is still 43 um off at 0.3 s.
-- **A shaper cuts the residual vibration by about a factor of seven** and the carriage is inside the 20 um band at the
-  end of the commanded motion.
-- **The shaper is forgiving.** Tuned to 69.02 Hz, the frequency the trade study estimated from the belt alone, 11 percent
-  above the real 62.08 Hz of the axis with the stepper's own stiffness, it still leaves only 10 um, and passes. The tracking
-  error grows from 80 to 90 um, close to the 100 um limit.
-- **Microstep quantisation sets the floor.** Each command step is 12.5 um at 20 kHz, which excites the carriage broadly,
-  so what is left after a correct shaper is 6 um at the resonance and some at the second mode (352 Hz).
+- **Without a shaper no drive meets the tracking limit**, and only the closed-loop stepper settles in time: its position
+  loop has a derivative term, which damps the 63 Hz mode. The open-loop stepper has no damping to speak of and never settles.
+- **With a shaper every drive passes**, with 1 to 6 um of residual vibration, which is what the microstep quantisation
+  (12.5 um steps at 20 kHz) leaves. The shaper is forgiving: tuned 11 percent off it still leaves 10 um.
+- **The closed-loop axes resonate where the stepper's holding stiffness used to be.** The position loop gives a stiffness
+  of about 5.6e5 N/m at the belt for the closed-loop stepper and 5.0e5 for the servo, so the first mode is 63.5 and 61.5 Hz,
+  close to the open-loop stepper's 62.08 Hz. A softer loop would lower it (a stiffness of 1e5 gives 44 Hz, under the 50 Hz
+  required): the gains are chosen to keep it up.
 
-An earlier run left the carriage 12 um short of its target: the plant's pulley radius was 6.37 mm and the firmware assumed
-the exact 6.3662 mm of a 20-tooth, 2 mm pitch pulley, which is a 0.06 percent error in steps per mm. The plant now has
-the exact radius; the offset is what a wrong steps-per-mm setting would cost on a real printer.
+Run42 with the firmware in the loop and an independent Python integration of the whole axis (`scripts/axis_design.py`,
+fixed-step Runge-Kutta, where the gains were chosen) agree to under a micrometre on every number, for example 40.6 against
+40.8 um and 40.0 against 40.0 ms for the closed-loop stepper without a shaper.
+
+## The belt limits the acceleration, not the drive
+
+`scripts/axis_design.py` also sweeps the acceleration of a shaped 20 mm move at 300 mm/s:
+
+| Acceleration | Open-loop stepper | Closed-loop stepper | Servo | Belt stretch m a / k |
+| --- | --- | --- | --- | --- |
+| 10 m/s^2 | 80 um | 72 um | 73 um | 53 um |
+| 20 m/s^2 | 146 um | 143 um | 144 um | 106 um |
+| 40 m/s^2 | 278 um | 253 um | 281 um | 213 um |
+
+(tracking error against the commanded position.) **No drive loses the move**, even at 120 m/s^2, so the motors' force is not
+the limit. The tracking error is the stretch of the belt, m a / k, times about 1.4, and it is the same for every drive. The
+0.1 mm limit of SYS-008 is reached at about 14 m/s^2: only 40 percent above the 10 m/s^2 of SYS-003. The trade study estimated that
+the motors allow 59 to 104 m/s^2 and the ringing limit 78 m/s^2; the belt allows 13. The stiffness of the belt path is the
+number that decides how fast this printer can go, which makes a measurement of it the most valuable next step.
 
 ## What it means for the architecture
 
@@ -43,5 +67,5 @@ to a shaper, so calibration needs to be good but not exact.
 
 ## Not yet
 
-One axis, one move, a constant current and an open-loop stepper. The acceleration the motors allow (SYS-003), a closed-loop
-stepper and a servo drive, the heater control and the reference print time (SYS-020) are still open.
+One axis and one move. The two axes of a CoreXY acting together, a measured belt stiffness, the heater control and the
+reference print time (SYS-020) are still open.
