@@ -1,3 +1,8 @@
+<!--
+SPDX-FileCopyrightText: 2026 Elan8
+SPDX-License-Identifier: MIT
+-->
+
 # Verification of one axis by simulation
 
 The motion controller's firmware (`firmware/axis-controller`, WebAssembly, run in the loop by Run42) plays a 20 mm

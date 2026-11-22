@@ -1,5 +1,6 @@
 /*
  * SPDX-FileCopyrightText: 2026 Elan8
+ * SPDX-License-Identifier: MIT
  *
  * The motion and heater control: the microcontroller, its motion planner and its heater control, and the safety
  * monitor. Three designs are compared: an 8-bit board with a trapezoidal planner and a PID, a 32-bit board with

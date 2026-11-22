@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 Elan8
+# SPDX-License-Identifier: MIT
 """Checks of the trade-study script: unit conversion, the physics of the roll-ups, and the outcomes the architecture
 is expected to give."""
 import math

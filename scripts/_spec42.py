@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 Elan8
+# SPDX-License-Identifier: MIT
 """Shared helpers for locating the spec42 CLI and its library-path arguments.
 
 Used by validate_spec42.py.
@@ -123,6 +125,7 @@ def find_spec42(explicit: str | None = None) -> str:
 
 
 def domain_library_args() -> list[str]:
+    """Select this project's domain library for Spec42."""
     return ["--kpar-library-path", f"domain={domain_library_path()}"]
 
 

@@ -1,3 +1,8 @@
+<!--
+SPDX-FileCopyrightText: 2026 Elan8
+SPDX-License-Identifier: MIT
+-->
+
 # Project notes
 
 - **System of interest:** `FdmPrinter::FdmPrinterSpecification`; the lead candidate is

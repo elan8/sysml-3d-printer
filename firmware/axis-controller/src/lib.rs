@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2026 Elan8
+// SPDX-License-Identifier: MIT
 //! Printer motion controller for Run42's WebAssembly guest interface (ABI 2).
 //!
 //! It plays one move, a trapezoidal profile of 20 mm at up to 300 mm/s and 10,000 mm/s^2, starting 2 ms after boot. With

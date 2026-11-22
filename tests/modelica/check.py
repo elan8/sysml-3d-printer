@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 Elan8
+# SPDX-License-Identifier: MIT
 """Check the AxisTests results against references derived without a simulator.
 
     python3 check.py <directory with <Model>.csv>
