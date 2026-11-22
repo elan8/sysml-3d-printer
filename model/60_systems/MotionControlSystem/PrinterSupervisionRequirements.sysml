@@ -15,5 +15,9 @@ package PrinterSupervisionRequirements {
            A new print becomes available after recovery is confirmed and the operator resets the fault. */
   }
 
+  requirement <'CTRL-003'> NormalWarmupPermission {
+    doc /* Continue to permit heat throughout a healthy hotend warm-up while the other job prerequisites are pending. */
+  }
+
   dependency heaterFaultResponse from ReportedFaultResponse to FdmPrinter::Requirements::'SYS-015';
 }

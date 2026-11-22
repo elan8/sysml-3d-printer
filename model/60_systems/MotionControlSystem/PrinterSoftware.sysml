@@ -4,6 +4,7 @@
  */
 package PrinterSoftware {
   private import ScalarValues::*;
+  private import SI::*;
   private import Elan8::Software::*;
   private import PrinterInterfaces::*;
 
@@ -15,6 +16,7 @@ package PrinterSoftware {
     bind operator.phase = job.phase;
     bind motion.requestedMode = job.motionRequest;
     bind thermal.heatPermitted = job.heatPermitted;
+    bind safety.warmupAlarm = job.warmupAlarm;
 
     state job {
       attribute phase : JobPhase := JobPhase::idle;
@@ -26,6 +28,7 @@ package PrinterSoftware {
       attribute cooled : Boolean := false;
       attribute cancelledJob : Boolean := false;
       attribute resetPermitted : Boolean := false;
+      attribute warmupAlarm : Real := 0;
 
       entry;
       then idle;
@@ -45,6 +48,8 @@ package PrinterSoftware {
       }
       state preparing {
         entry action reportPreparing { assign phase := JobPhase::preparing; }
+        // The coupled runtime reads the watchdog at each of these sample boundaries.
+        do action pollWarmupAlarm { while true { accept after 0.25 [s]; } }
       }
       state printing {
         entry action runMotion {
@@ -80,6 +85,7 @@ package PrinterSoftware {
           then assign motionRequest := MotionMode::stop;
           then assign phase := JobPhase::fault;
         }
+        do action pollFaultStatus { while true { accept after 0.25 [s]; } }
       }
 
       transition start first idle accept StartPrint
@@ -157,6 +163,7 @@ package PrinterSoftware {
 
       transition faultInIdle first idle accept HeaterFault then fault;
       transition faultInPreparation first preparing accept HeaterFault then fault;
+      transition warmupAlarmDetected first preparing accept when warmupAlarm > 0.5 then fault;
       transition faultInPrint first printing accept HeaterFault then fault;
       transition faultInPauseRequest first pausing accept HeaterFault then fault;
       transition faultInPause first paused accept HeaterFault then fault;
@@ -191,7 +198,7 @@ package PrinterSoftware {
   }
 
   part def SafetyMonitor :> SoftwareModule {
-    doc /* Reports heater faults and confirms the recovery interlock before the operator can reset the supervisor. */
+    doc /* Reports heater faults, exposes a latched warm-up alarm and confirms the recovery interlock. */
     port supervisor : ~SupervisorSafetyPort;
   }
 
