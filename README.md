@@ -185,6 +185,12 @@ system package per system under `60_systems`, and the selected root system in `0
 [sysml-robot-vacuum-cleaner](https://github.com/elan8/sysml-robot-vacuum-cleaner), which shows the model-to-documents path
 for a product without simulation: this example adds a plant, firmware and verification by simulation.
 
+## Roadmap
+
+What comes next, in order: reproducible evidence in CI, simulating the printing of a part (the open reference print time,
+SYS-020), sensitivity of the decision to the assumed values, and labelling each result by its level of evidence. See the
+[roadmap](ROADMAP.md).
+
 ## Contributing
 
 Contributions are welcome: see [CONTRIBUTING.md](CONTRIBUTING.md) and the [Code of Conduct](CODE_OF_CONDUCT.md). Report
