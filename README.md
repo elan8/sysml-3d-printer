@@ -31,6 +31,7 @@ decide how fast the printer can go before the vibration shows in the part.
 | The architecture, which rolls their properties up, and six candidate integrations | `00_FdmPrinter/system.sysml` |
 | Architecture trade study, generated from the model | `docs/trade-study.md`, `scripts/trade_study.py` |
 | Decision record for the lead candidate | `records/ADR-001-lead-architecture.md` |
+| One axis: stepper, pulley, belt and carriage, with Modelica reference cases | `model/70_verification/AxisPlant.sysml`, `tests/modelica`, `docs/axis-model.md` |
 
 Each system requirement constrains a property of the specification against a number in `Limits`, and
 `Traceability` links it to the stakeholder needs it serves.
@@ -42,7 +43,9 @@ Each system requirement constrains a property of the specification against a num
    requirements the architecture decides. The lead candidate (proposed in ADR-001) is a CoreXY on an extrusion
    frame with closed-loop steppers, a high-flow hotend and a 32-bit board with input shaping. A bed-slinger cannot
    reach the resonance whatever the electronics, and without the shaper the CoreXY just misses the ringing limit.
-3. **One axis**: a motor, a belt and a carriage with a resonance, as Modelica classes with exact-answer checks.
+3. **One axis**: a stepper motor, a belt and a carriage with a resonance, as Modelica classes with exact-answer checks
+   (`docs/axis-model.md`). The stepper's own holding stiffness lowers the first resonance of the lead candidate from the
+   trade study's 69 Hz to 62 Hz.
 4. **Verification** with Run42: settling, tracking and ringing of an axis with the motion controller's firmware in
    the loop, with and without input shaping; then the heater control and the runaway monitor.
 5. **Documents** generated with Doc42, with the verdicts and plots in them.
@@ -61,6 +64,10 @@ same design values, because Spec42 does not evaluate expressions through an inte
 outcomes the analysis is expected to give.
 
 ## Validate
+
+The axis model uses the stepper motor added to the Elan8 domain library after release 0.8.0. Until a release has it,
+point the scripts at a checkout of the domain library with `ELAN8_DOMAIN_LIBRARY=<checkout>` (and the Modelica tests
+at its Modelica package with `ELAN8_MODELICA=<checkout>/modelica`).
 
 ```bash
 python3 scripts/validate_spec42.py
