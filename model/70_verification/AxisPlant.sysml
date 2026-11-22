@@ -1,5 +1,6 @@
 /*
  * SPDX-FileCopyrightText: 2026 Elan8
+ * SPDX-License-Identifier: MIT
  *
  * The plant of one motion axis, built from the domain library: a stepper motor on two current-regulated bridges (or a
  * brushless servo), a 20-tooth belt pulley, the belt as a spring and the carriage as a mass. The figures are the lead candidate's

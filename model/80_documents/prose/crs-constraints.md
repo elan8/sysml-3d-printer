@@ -1,0 +1,1 @@
+The needs above are stated in the stakeholders' terms. The figures behind the system requirements rest on the following assumptions, each owned by the stakeholder it concerns. An assumption is to be replaced by a sourced value or accepted by its owner; the system requirements cite them in their rationale.

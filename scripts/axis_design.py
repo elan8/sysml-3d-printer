@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# SPDX-FileCopyrightText: 2026 Elan8
+# SPDX-License-Identifier: MIT
 """Design and cross-check the axis controllers: the full electromechanical axis integrated in Python.
 
 The axis is the one of `model/70_verification/AxisPlant.sysml`: a drive (an open-loop or closed-loop stepper, or a brushless

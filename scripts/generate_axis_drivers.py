@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# SPDX-FileCopyrightText: 2026 Elan8
+# SPDX-License-Identifier: MIT
 """Write the Run42 driver files in verification/ for the axis controllers.
 
 They differ in the firmware they load and in the plant and drive they select: an open-loop stepper, a closed-loop

@@ -3,3 +3,8 @@ tests/modelica/out/
 __pycache__/
 generated/
 build/
+
+# Rendered documents, intermediates and the checkouts CI makes.
+/generated/
+/.libraries/
+/out/

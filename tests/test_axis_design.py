@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 Elan8
+# SPDX-License-Identifier: MIT
 """The axis design script: its integration agrees with what the Run42 verification found, and its gains are the firmware's."""
 import re
 import sys

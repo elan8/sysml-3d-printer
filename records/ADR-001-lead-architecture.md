@@ -1,3 +1,8 @@
+<!--
+SPDX-FileCopyrightText: 2026 Elan8
+SPDX-License-Identifier: MIT
+-->
+
 # ADR-001: Lead architecture candidate
 
 **Status:** proposed, for review by the project owner.

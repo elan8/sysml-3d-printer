@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 Elan8
+# SPDX-License-Identifier: MIT
 """Shared helpers for locating the spec42 CLI and its library-path arguments.
 
 Used by validate_spec42.py.

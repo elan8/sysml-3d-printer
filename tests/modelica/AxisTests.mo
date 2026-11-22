@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2026 Elan8
+// SPDX-License-Identifier: MIT
 within ;
 package AxisTests "One motion axis: a stepper motor, a 20-tooth belt pulley, a belt and a carriage, checked by check.py against references derived without a simulator"
   model AxisBeltOnly "The carriage released 0.2 mm from rest on the belt (1.26e5 N/m) with the pulley held: the one-mass-one-spring model of the trade study"

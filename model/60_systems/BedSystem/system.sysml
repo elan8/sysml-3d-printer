@@ -1,5 +1,6 @@
 /*
  * SPDX-FileCopyrightText: 2026 Elan8
+ * SPDX-License-Identifier: MIT
  *
  * The heated bed: the build plate and its heater. Two designs are compared: a 300 W and a 400 W silicone heater
  * under the same 250 mm aluminium plate. The plate is the same thermal mass; the power sets the heat-up.
