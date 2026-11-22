@@ -149,6 +149,15 @@ The Python scripts download and verify the SysML library pinned in `config/domai
 reference cases, extract `elan8-domain-modelica-0.9.0.zip` from the same release and set `ELAN8_MODELICA` to the directory
 that contains `Elan8/`.
 
+One command runs every check and prints a summary; a step whose tool is missing is reported as skipped, not passed:
+
+```sh
+bash scripts/verify-all.sh            # the public checks
+RUN42=/path/to/run42 bash scripts/verify-all.sh --run42   # also the simulations (needs matplotlib), and whether the committed results still match
+```
+
+The individual checks:
+
 ```sh
 python3 scripts/validate_spec42.py                 # 0 errors, 0 warnings
 python3 -B -m unittest discover -s tests           # the trade study, the generated files, the axis design
