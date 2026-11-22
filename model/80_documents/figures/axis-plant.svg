@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="300" viewBox="0 0 900 300" font-family="sans-serif" font-size="15">
+  <title>One motion axis: a stepper motor, a pulley, the belt as a spring and the carriage as a mass</title>
+  <rect width="900" height="300" fill="#ffffff"/>
+  <!-- ground -->
+  <line x1="40" y1="250" x2="860" y2="250" stroke="#57606a" stroke-width="2"/>
+  <g stroke="#57606a" stroke-width="1.5">
+    <line x1="60" y1="250" x2="48" y2="264"/><line x1="100" y1="250" x2="88" y2="264"/><line x1="140" y1="250" x2="128" y2="264"/>
+    <line x1="180" y1="250" x2="168" y2="264"/><line x1="220" y1="250" x2="208" y2="264"/><line x1="260" y1="250" x2="248" y2="264"/>
+    <line x1="300" y1="250" x2="288" y2="264"/><line x1="340" y1="250" x2="328" y2="264"/><line x1="380" y1="250" x2="368" y2="264"/>
+    <line x1="420" y1="250" x2="408" y2="264"/><line x1="460" y1="250" x2="448" y2="264"/><line x1="500" y1="250" x2="488" y2="264"/>
+    <line x1="540" y1="250" x2="528" y2="264"/><line x1="580" y1="250" x2="568" y2="264"/><line x1="620" y1="250" x2="608" y2="264"/>
+    <line x1="660" y1="250" x2="648" y2="264"/><line x1="700" y1="250" x2="688" y2="264"/><line x1="740" y1="250" x2="728" y2="264"/>
+    <line x1="780" y1="250" x2="768" y2="264"/><line x1="820" y1="250" x2="808" y2="264"/>
+  </g>
+  <!-- stepper motor -->
+  <rect x="60" y="130" width="110" height="80" rx="6" fill="#dbeafe" stroke="#1f6feb" stroke-width="2"/>
+  <text x="115" y="160" text-anchor="middle" font-weight="bold" fill="#0b3d91">Stepper motor</text>
+  <text x="115" y="180" text-anchor="middle" fill="#0b3d91">field angle, current</text>
+  <text x="115" y="198" text-anchor="middle" fill="#0b3d91">rotor inertia J</text>
+  <rect x="100" y="210" width="30" height="40" fill="#dbeafe" stroke="#1f6feb" stroke-width="2"/>
+  <!-- shaft -->
+  <line x1="170" y1="170" x2="240" y2="170" stroke="#1a7f37" stroke-width="5"/>
+  <!-- pulley -->
+  <circle cx="270" cy="170" r="30" fill="#dafbe1" stroke="#1a7f37" stroke-width="2"/>
+  <circle cx="270" cy="170" r="4" fill="#1a7f37"/>
+  <text x="270" y="228" text-anchor="middle" fill="#116329">Pulley, radius r</text>
+  <!-- belt: spring -->
+  <line x1="300" y1="140" x2="360" y2="140" stroke="#9a6700" stroke-width="3"/>
+  <polyline points="360,140 372,120 392,160 412,120 432,160 452,120 472,160 492,120 512,160 532,120 548,140" fill="none" stroke="#9a6700" stroke-width="3"/>
+  <line x1="548" y1="140" x2="600" y2="140" stroke="#9a6700" stroke-width="3"/>
+  <text x="455" y="105" text-anchor="middle" fill="#7d4e00">Belt: spring, stiffness k</text>
+  <!-- carriage -->
+  <rect x="600" y="100" width="150" height="110" rx="6" fill="#fde8e8" stroke="#d1242f" stroke-width="2"/>
+  <text x="675" y="146" text-anchor="middle" font-weight="bold" fill="#82071e">Carriage</text>
+  <text x="675" y="168" text-anchor="middle" fill="#82071e">mass m (with hotend)</text>
+  <text x="675" y="190" text-anchor="middle" fill="#82071e">position x</text>
+  <circle cx="630" cy="222" r="10" fill="#ffffff" stroke="#57606a" stroke-width="2"/><circle cx="720" cy="222" r="10" fill="#ffffff" stroke="#57606a" stroke-width="2"/>
+  <!-- annotations -->
+  <text x="450" y="285" text-anchor="middle" fill="#57606a">x = r theta at the pulley; the carriage follows through the belt</text>
+</svg>

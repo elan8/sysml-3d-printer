@@ -1,0 +1,3 @@
+The system of interest is the printer: its motion structure, motor drive, hotend, heated bed, power supply and the control board with its firmware. The engineer, the team lead, the technician, the office neighbour and the workspace are outside it; the requirements constrain what the printer does at its boundary: moving, heating, printing, failing and standing on a desk.
+
+The requirements are grouped by what they are about. Each states a measurable property and its limit, and each names the customer requirement it was derived from. The design that meets them is in FDM-SDS-001, and how each is verified is in FDM-VVR-001.

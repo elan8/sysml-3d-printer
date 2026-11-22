@@ -1,5 +1,6 @@
 /*
  * SPDX-FileCopyrightText: 2026 Elan8
+ * SPDX-License-Identifier: MIT
  *
  * Operational scenarios: what the engineer, the team lead and the technician do with the printer.
  */

@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 Elan8
+# SPDX-License-Identifier: MIT
 """The files generated for the axis verification are current."""
 import json
 import sys

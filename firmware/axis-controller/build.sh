@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# SPDX-FileCopyrightText: 2026 Elan8
+# SPDX-License-Identifier: MIT
 # Build the variants of the axis controller for WebAssembly into build/axis-<name>.wasm:
 #   open-trapezoid  open-loop stepper, no input shaper
 #   open-shaped     open-loop stepper, a zero-vibration shaper tuned to the axis with the stepper's own stiffness, 62.08 Hz

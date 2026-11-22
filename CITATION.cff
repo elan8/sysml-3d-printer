@@ -1,0 +1,18 @@
+# SPDX-FileCopyrightText: 2026 Elan8
+# SPDX-License-Identifier: MIT
+cff-version: 1.2.0
+message: "If you use this SysML v2 showcase, please cite it using this metadata."
+title: "Desktop 3D Printer SysML v2 Showcase"
+type: software
+authors:
+  - name: "Elan8"
+license: MIT
+repository-code: "https://github.com/elan8/sysml-3d-printer"
+abstract: "SysML v2 showcase model of a desktop fused-filament 3D printer: requirements, an architecture trade study, a plant model of a motion axis with a stepper motor, and verification of the axis controller firmware by simulation, with generated engineering documents."
+keywords:
+  - SysML v2
+  - MBSE
+  - 3D printing
+  - control engineering
+  - requirements
+  - verification by simulation

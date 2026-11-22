@@ -1,5 +1,6 @@
 /*
  * SPDX-FileCopyrightText: 2026 Elan8
+ * SPDX-License-Identifier: MIT
  *
  * Stakeholder requirements: what the people involved need, in their own words. Where they know a figure
  * it is stated, but nothing here says how it is measured: the measurable system requirements are derived

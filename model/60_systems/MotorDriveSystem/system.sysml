@@ -1,5 +1,6 @@
 /*
  * SPDX-FileCopyrightText: 2026 Elan8
+ * SPDX-License-Identifier: MIT
  *
  * The motor drive: the four motors, their drivers and sensing. Three designs are compared: open-loop stepper
  * motors, stepper motors with an encoder and closed-loop current control, and brushless servo motors. Force

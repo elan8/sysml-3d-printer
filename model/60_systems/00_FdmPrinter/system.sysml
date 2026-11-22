@@ -1,5 +1,6 @@
 /*
  * SPDX-FileCopyrightText: 2026 Elan8
+ * SPDX-License-Identifier: MIT
  *
  * The printer: its specification (what it promises at its boundary), the measurable system requirements derived
  * from the stakeholder needs, and the traceability between them, then the architecture that rolls the
@@ -48,26 +49,6 @@ package FdmPrinter {
     // Use
     attribute referencePrintTime : DurationValue;
 
-    satisfy Requirements::'SYS-001';
-    satisfy Requirements::'SYS-002';
-    satisfy Requirements::'SYS-003';
-    satisfy Requirements::'SYS-004';
-    satisfy Requirements::'SYS-005';
-    satisfy Requirements::'SYS-006';
-    satisfy Requirements::'SYS-007';
-    satisfy Requirements::'SYS-008';
-    satisfy Requirements::'SYS-009';
-    satisfy Requirements::'SYS-010';
-    satisfy Requirements::'SYS-011';
-    satisfy Requirements::'SYS-012';
-    satisfy Requirements::'SYS-013';
-    satisfy Requirements::'SYS-014';
-    satisfy Requirements::'SYS-015';
-    satisfy Requirements::'SYS-016';
-    satisfy Requirements::'SYS-017';
-    satisfy Requirements::'SYS-018';
-    satisfy Requirements::'SYS-019';
-    satisfy Requirements::'SYS-020';
   }
 
   /* The numbers the requirements compare against, in one place. Each cites the stakeholder need and the
@@ -258,6 +239,28 @@ package FdmPrinter {
   }
   part candidateCoreXYClosedShaped : CoreXYClosedShapedIntegration;
 
+  /* The lead candidate is the design that is claimed to satisfy the requirements: the ones the trade study judges it to
+     meet and the ones a simulation verifies. SYS-020 (the reference print time) is not claimed: nothing yet shows it. */
+  satisfy Requirements::'SYS-001' by candidateCoreXYClosedShaped;
+  satisfy Requirements::'SYS-002' by candidateCoreXYClosedShaped;
+  satisfy Requirements::'SYS-003' by candidateCoreXYClosedShaped;
+  satisfy Requirements::'SYS-004' by candidateCoreXYClosedShaped;
+  satisfy Requirements::'SYS-005' by candidateCoreXYClosedShaped;
+  satisfy Requirements::'SYS-006' by candidateCoreXYClosedShaped;
+  satisfy Requirements::'SYS-007' by candidateCoreXYClosedShaped;
+  satisfy Requirements::'SYS-008' by candidateCoreXYClosedShaped;
+  satisfy Requirements::'SYS-009' by candidateCoreXYClosedShaped;
+  satisfy Requirements::'SYS-010' by candidateCoreXYClosedShaped;
+  satisfy Requirements::'SYS-011' by candidateCoreXYClosedShaped;
+  satisfy Requirements::'SYS-012' by candidateCoreXYClosedShaped;
+  satisfy Requirements::'SYS-013' by candidateCoreXYClosedShaped;
+  satisfy Requirements::'SYS-014' by candidateCoreXYClosedShaped;
+  satisfy Requirements::'SYS-015' by candidateCoreXYClosedShaped;
+  satisfy Requirements::'SYS-016' by candidateCoreXYClosedShaped;
+  satisfy Requirements::'SYS-017' by candidateCoreXYClosedShaped;
+  satisfy Requirements::'SYS-018' by candidateCoreXYClosedShaped;
+  satisfy Requirements::'SYS-019' by candidateCoreXYClosedShaped;
+
   part def CoreXYWideServoShapedIntegration
       :> FdmPrinterArchitecture, Elan8::SystemsEngineering::SystemIntegration {
     doc /* CoreXY with wide belts on a sheet-steel frame, brushless servos, high-flow hotend, 400 W bed, 600 W supply, advanced control. */
@@ -332,36 +335,98 @@ package FdmPrinter {
     }
   }
 
-  /* Each system requirement derives from the stakeholder needs it serves. */
+  /* Each customer requirement is covered by a derivation: the system requirements derived from it, and the reason that
+     set is complete. Every system requirement is derived from at least one customer requirement. */
   package Traceability {
+    private import RequirementDerivation::*;
+    private import ModelingMetadata::*;
     private import StakeholderNeeds::*;
     private import Requirements::*;
 
-    dependency 'SYS-001 derives from USR-012' from 'SYS-001' to 'USR-012';
-    dependency 'SYS-002 derives from USR-001' from 'SYS-002' to 'USR-001';
-    dependency 'SYS-003 derives from USR-001' from 'SYS-003' to 'USR-001';
-    dependency 'SYS-003 derives from USR-003' from 'SYS-003' to 'USR-003';
-    dependency 'SYS-004 derives from USR-002' from 'SYS-004' to 'USR-002';
-    dependency 'SYS-005 derives from USR-003' from 'SYS-005' to 'USR-003';
-    dependency 'SYS-005 derives from USR-010' from 'SYS-005' to 'USR-010';
-    dependency 'SYS-006 derives from USR-003' from 'SYS-006' to 'USR-003';
-    dependency 'SYS-007 derives from USR-002' from 'SYS-007' to 'USR-002';
-    dependency 'SYS-007 derives from USR-003' from 'SYS-007' to 'USR-003';
-    dependency 'SYS-008 derives from USR-002' from 'SYS-008' to 'USR-002';
-    dependency 'SYS-009 derives from USR-004' from 'SYS-009' to 'USR-004';
-    dependency 'SYS-010 derives from USR-005' from 'SYS-010' to 'USR-005';
-    dependency 'SYS-011 derives from USR-011' from 'SYS-011' to 'USR-011';
-    dependency 'SYS-011 derives from USR-001' from 'SYS-011' to 'USR-001';
-    dependency 'SYS-012 derives from USR-011' from 'SYS-012' to 'USR-011';
-    dependency 'SYS-012 derives from USR-002' from 'SYS-012' to 'USR-002';
-    dependency 'SYS-013 derives from USR-004' from 'SYS-013' to 'USR-004';
-    dependency 'SYS-013 derives from USR-005' from 'SYS-013' to 'USR-005';
-    dependency 'SYS-014 derives from USR-007' from 'SYS-014' to 'USR-007';
-    dependency 'SYS-015 derives from USR-007' from 'SYS-015' to 'USR-007';
-    dependency 'SYS-016 derives from USR-006' from 'SYS-016' to 'USR-006';
-    dependency 'SYS-017 derives from USR-008' from 'SYS-017' to 'USR-008';
-    dependency 'SYS-018 derives from USR-008' from 'SYS-018' to 'USR-008';
-    dependency 'SYS-019 derives from USR-009' from 'SYS-019' to 'USR-009';
-    dependency 'SYS-020 derives from USR-001' from 'SYS-020' to 'USR-001';
+    connection fastPrints : Derivation {
+      @Rationale { text = "A bracket has to come off within the hour. That takes a toolhead that goes fast (speed), one that can change speed quickly enough for the short moves of a layer (acceleration), a hotend that melts the plastic at that speed (melt flow), and the total, the print time of the reference part, which is what the team lead experiences."; }
+      end :>> Derivation::originalRequirement ::> 'USR-001';
+      end #derive derived1 ::> 'SYS-002';
+      end #derive derived2 ::> 'SYS-003';
+      end #derive derived3 ::> 'SYS-011';
+      end #derive derived4 ::> 'SYS-020';
+    }
+
+    connection partsThatFit : Derivation {
+      @Rationale { text = "A part fits when its dimensions are right. The error budget bounds the static error (motor and belt positioning, thermal growth of the frame, geometry and residual vibration); settling and tracking bound the error while the toolhead moves; and a nozzle temperature that holds keeps the extruded line the width the slicer assumed."; }
+      end :>> Derivation::originalRequirement ::> 'USR-002';
+      end #derive derived1 ::> 'SYS-004';
+      end #derive derived2 ::> 'SYS-007';
+      end #derive derived3 ::> 'SYS-008';
+      end #derive derived4 ::> 'SYS-012';
+    }
+
+    connection cleanSurfaces : Derivation {
+      @Rationale { text = "Ghosting is the vibration the toolhead leaves behind a corner. It is limited by the acceleration at which it is allowed to appear, by the resonance the vibration rings at, by its amplitude and by how quickly it dies out."; }
+      end :>> Derivation::originalRequirement ::> 'USR-003';
+      end #derive derived1 ::> 'SYS-003';
+      end #derive derived2 ::> 'SYS-005';
+      end #derive derived3 ::> 'SYS-006';
+      end #derive derived4 ::> 'SYS-007';
+    }
+
+    connection readyQuickly : Derivation {
+      @Rationale { text = "The wait before the first layer is the longer of the two heat-ups: the nozzle to its printing temperature and the bed to its."; }
+      end :>> Derivation::originalRequirement ::> 'USR-004';
+      end #derive derived1 ::> 'SYS-009';
+      end #derive derived2 ::> 'SYS-013';
+    }
+
+    connection commonMaterials : Derivation {
+      @Rationale { text = "PLA, PETG and ABS need a nozzle up to 300 degC and a bed up to 100 degC; the requirements give the limits and how long it may take to reach them."; }
+      end :>> Derivation::originalRequirement ::> 'USR-005';
+      end #derive derived1 ::> 'SYS-010';
+      end #derive derived2 ::> 'SYS-013';
+    }
+
+    connection quietEnough : Derivation {
+      @Rationale { text = "The noise a neighbour hears is the sound pressure level of the machine at full speed, which is the one number that decides whether it is acceptable in a shared office."; }
+      end :>> Derivation::originalRequirement ::> 'USR-006';
+      end #derive derived1 ::> 'SYS-016';
+    }
+
+    connection safeToLeaveRunning : Derivation {
+      @Rationale { text = "Fire is the hazard. A supply that cannot deliver what the heaters and motors ask for overloads and heats, and a heater that does not respond as it should is the fault that starts the fire: the supply is rated for the peak, and a runaway is detected and the heater switched off within the time given."; }
+      end :>> Derivation::originalRequirement ::> 'USR-007';
+      end #derive derived1 ::> 'SYS-014';
+      end #derive derived2 ::> 'SYS-015';
+    }
+
+    connection fitsOnADesk : Derivation {
+      @Rationale { text = "A desk has an area and a person who lifts the printer onto it has a limit: the footprint and the mass."; }
+      end :>> Derivation::originalRequirement ::> 'USR-008';
+      end #derive derived1 ::> 'SYS-017';
+      end #derive derived2 ::> 'SYS-018';
+    }
+
+    connection affordable : Derivation {
+      @Rationale { text = "What the team pays is the bill of parts, so the cost requirement is the bill of parts."; }
+      end :>> Derivation::originalRequirement ::> 'USR-009';
+      end #derive derived1 ::> 'SYS-019';
+    }
+
+    connection keepsItsCalibration : Derivation {
+      @Rationale { text = "The calibration of a shaper is the resonance it was tuned to. A resonance that is high enough has a shaper that is not sensitive to a small drift of it, so a calibration that holds for months does not need to be exact."; }
+      end :>> Derivation::originalRequirement ::> 'USR-010';
+      end #derive derived1 ::> 'SYS-005';
+    }
+
+    connection steadyExtrusion : Derivation {
+      @Rationale { text = "Thin, weak lines come from too little melt or from a temperature that sags when the flow rises: the melt flow the hotend sustains, and the stability of the temperature at that flow."; }
+      end :>> Derivation::originalRequirement ::> 'USR-011';
+      end #derive derived1 ::> 'SYS-011';
+      end #derive derived2 ::> 'SYS-012';
+    }
+
+    connection fitsMyParts : Derivation {
+      @Rationale { text = "Parts up to about 25 cm are fitted by a build volume of 250 mm in each direction."; }
+      end :>> Derivation::originalRequirement ::> 'USR-012';
+      end #derive derived1 ::> 'SYS-001';
+    }
   }
 }

@@ -1,0 +1,4 @@
+- The belt stiffness, the moving mass and the thermal growth of the frame are working figures to be measured on a built axis.
+- The simulation covers one axis and one move. The two axes of a CoreXY acting together, a toolpath (the reference print time, SYS-020) and the heater control are not yet simulated.
+- The acceleration, ringing and error-budget figures of the trade study are estimates from a one-mass-on-one-spring model, checked for one axis by simulation.
+- The standards that apply to a mains-powered heated device, and the safety measures behind SYS-015, are open (assumption A-SAFE-1).
