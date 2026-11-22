@@ -65,6 +65,10 @@ by simulation with the real controller firmware in the loop. On a blended corner
 
 All figures are results of the model and its simulations under stated assumptions, not measurements of a built printer.
 
+The part the printer is sized against is the 100 x 100 x 20 mm [reference bracket](docs/reference-part/README.md):
+
+![The reference bracket](docs/reference-part/bracket.svg)
+
 ## What you can learn from it
 
 The analysis produced results that were not obvious from the requirements:
