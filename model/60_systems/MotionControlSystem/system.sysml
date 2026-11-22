@@ -53,5 +53,6 @@ package MotionControlSystem {
     attribute :>> runawayDetectionTime = 8 [s];
     attribute :>> power = 15 [W];
     attribute :>> cost = 60;
+    part firmware : PrinterSoftware::PrinterFirmware;
   }
 }
