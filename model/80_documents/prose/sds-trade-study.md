@@ -18,9 +18,9 @@ Six candidate printers, each selecting one design per subsystem, are compared ag
 | SYS-015 Thermal runaway detection       | FAIL 40 s           | PASS 8 s            | PASS 8 s            | PASS 8 s              | PASS 8 s            | FAIL 40 s           |
 | SYS-016 Noise                           | PASS 52 dB(A)       | PASS 52 dB(A)       | FAIL 56 dB(A)       | PASS 47 dB(A)         | PASS 52 dB(A)       | FAIL 56 dB(A)       |
 | SYS-017 Footprint                       | PASS 0.96 of limit  | PASS 0.96 of limit  | PASS 0.96 of limit  | PASS 0.98 of limit    | FAIL 1.12 of limit  | FAIL 1.12 of limit  |
-| SYS-018 Mass                            | PASS 10.6 kg        | PASS 10.9 kg        | PASS 10.4 kg        | PASS 13.7 kg          | PASS 12.0 kg        | PASS 11.2 kg        |
+| SYS-018 Mass                            | PASS 12.0 kg        | PASS 12.4 kg        | PASS 11.9 kg        | FAIL 15.2 kg          | PASS 13.5 kg        | PASS 12.5 kg        |
 | SYS-019 Cost                            | PASS 503 EUR        | PASS 587 EUR        | PASS 507 EUR        | FAIL 887 EUR          | PASS 547 EUR        | PASS 343 EUR        |
-| Requirements failed                     | 7                   | 0                   | 1                   | 2                     | 4                   | 13                  |
+| Requirements failed                     | 7                   | 0                   | 1                   | 3                     | 4                   | 13                  |
 | Moving mass of the worst axis           | 0.64 kg             | 0.67 kg             | 0.67 kg             | 0.74 kg               | 1.60 kg             | 1.60 kg             |
 | Acceleration the motors allow           | 79 m/s^2            | 75 m/s^2            | 59 m/s^2            | 104 m/s^2             | 22 m/s^2            | 18 m/s^2            |
 | Acceleration the ringing limit allows   | 10 m/s^2            | 78 m/s^2            | 78 m/s^2            | 113 m/s^2             | 23 m/s^2            | 3 m/s^2             |

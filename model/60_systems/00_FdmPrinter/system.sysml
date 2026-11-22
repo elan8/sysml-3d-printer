@@ -207,7 +207,7 @@ package FdmPrinter {
     attribute :>> buildZ = structure.buildZ;
     attribute :>> footprintWidth = structure.footprintWidth;
     attribute :>> footprintDepth = structure.footprintDepth;
-    attribute :>> printerMass = structure.mass + drive.mass + hotend.mass + supply.mass;
+    attribute :>> printerMass = structure.mass + drive.mass + hotend.mass + bed.mass + supply.mass + control.mass;
     attribute :>> cost = structure.cost + drive.cost + hotend.cost + bed.cost + supply.cost + control.cost;
     attribute :>> meltFlow = hotend.maxFlow;
     attribute :>> hotendMaxTemperature = hotend.maxTemperature;
@@ -405,7 +405,7 @@ package FdmPrinter {
     }
 
     connection affordable : Derivation {
-      @Rationale { text = "What the team pays is the bill of parts, so the cost requirement is the bill of parts."; }
+      @Rationale { text = "What the team pays is the bill of parts, so the cost requirement is the bill of parts. The team lead asks for a few hundred euros; the limit of 750 EUR is our reading of that, taken from assumption A-MARKET-1 (a prosumer printer for engineering teams), and is to be confirmed with the team lead. The lead candidate is estimated at 587 EUR, 163 EUR inside it."; }
       end :>> Derivation::originalRequirement ::> 'USR-009';
       end #derive derived1 ::> 'SYS-019';
     }

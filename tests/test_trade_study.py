@@ -66,7 +66,7 @@ class Candidates(unittest.TestCase):
 
     def test_servos_and_a_steel_frame_are_the_most_accurate_but_cost_too_much_and_need_a_bigger_supply(self):
         servo, lead = self.results["CoreXYWideServoShaped"], self.results["CoreXYClosedShaped"]
-        self.assertEqual(self.failures("CoreXYWideServoShaped"), ["SYS-014", "SYS-019"])
+        self.assertEqual(self.failures("CoreXYWideServoShaped"), ["SYS-014", "SYS-018", "SYS-019"])
         self.assertLess(servo["budget"], 0.6 * lead["budget"])
 
     def test_the_belt_not_the_motor_limits_the_acceleration_of_every_shaped_candidate(self):

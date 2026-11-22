@@ -16,6 +16,7 @@ package BedSystem {
     attribute thermalMass : Real;                     // J/K, plate, heater and the part on it
     attribute meanLoss : PowerValue;                  // heat lost to the air while heating to 100 degC
     attribute maxTemperature : ThermodynamicTemperatureValue;
+    attribute mass : MassValue;                       // plate, heater and insulation
     attribute cost : Real;                            // euro
   }
 
@@ -26,6 +27,7 @@ package BedSystem {
     attribute :>> thermalMass = 950;
     attribute :>> meanLoss = 25 [W];
     attribute :>> maxTemperature = 383.15 [K];        // 110 degC
+    attribute :>> mass = 1.2 [kg];                    // 250 x 250 x 6 mm aluminium is 1.0 kg, the heater and insulation 0.2 kg (estimate)
     attribute :>> cost = 35;
   }
 
@@ -36,6 +38,7 @@ package BedSystem {
     attribute :>> thermalMass = 950;
     attribute :>> meanLoss = 25 [W];
     attribute :>> maxTemperature = 383.15 [K];        // 110 degC
+    attribute :>> mass = 1.25 [kg];                   // as the 300 W bed, with the larger heater (estimate)
     attribute :>> cost = 55;
   }
 }
