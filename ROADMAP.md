@@ -21,16 +21,25 @@ Anyone can re-run the checks, and CI notices when the committed results no longe
 
 ## 2. Print a part
 
-Close SYS-020, the reference print time, which is the one system requirement nothing yet verifies.
+Close SYS-020, the reference print time, which is the one system requirement nothing yet verifies. The requirement stays
+as it is: the 100 x 100 x 20 mm bracket in at most 60 minutes. Whether that is the right reference part is a stakeholder
+question for the team lead, not something to change because a simulation is slow.
 
-- Take a small test part, for example a few layers of the bracket's footprint, as a toolpath of lines, corners and travel
-  moves with the retraction and layer changes the slicer would produce.
-- Run the toolpath through the CoreXY plant with the controller firmware and input shaping in the loop, and measure the
-  print time, the tracking error along the path and the heater and flow demand.
-- Extrapolate the time of the full 100 x 100 x 20 mm bracket from the measured time per layer, and say that it is an
-  extrapolation.
+1. **Measure first.** Slice the bracket, simulate one layer with the released Run42, and record the wall-clock time per
+   simulated second. This one number decides which route follows.
+2. **Route A, if the whole print is affordable:** simulate all of it, as a manual or nightly job whose result is committed,
+   so there is nothing to extrapolate.
+3. **Route B, if it is not:** compute the print time with a fast model of the move planner (acceleration, junction speeds,
+   per-segment time), and check that model against the full simulation on a sample of layers, corners and travel moves.
+   The report states the sampled error of the model, not just the result.
+4. **The toolpath:** a real one. Generate an STL of the bracket from its dimensions with a small script, slice it with an
+   open-source slicer's command line, commit the G-code so that nothing needs the slicer to reproduce, and read it into the
+   move list of the driver files. A hand-written G-code generator is the fallback if the slicer cannot be used.
+5. **Measure** the print time, the tracking error along the path and the heater and flow demand, with the controller
+   firmware and input shaping in the loop.
+
 - Done when: SYS-020 has a verification case with a verdict, `satisfy` of SYS-020 is claimed or withdrawn on that evidence,
-  and the Verification Report shows it.
+  and the Verification Report shows it with its method and its limits.
 - Limits to state: this simulates motion, timing and heater demand. It does not simulate material deposition, adhesion or
   the strength of the part.
 
