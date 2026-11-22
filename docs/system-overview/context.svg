@@ -21,7 +21,7 @@
       <rect x="722" y="232" width="200" height="101" rx="10"/>
       <rect x="722" y="355" width="200" height="106" rx="10"/>
     </g>
-    <g font-size="20" font-weight="700">
+    <g font-size="18" font-weight="700">
       <text x="54" y="135">Engineer</text>
       <text x="54" y="264">Technician</text>
       <text x="54" y="386">Team lead</text>
@@ -45,7 +45,7 @@
       <path d="M402 321V209H558V321M390 322H570V350H390ZM402 232H558M480 232V255L470 270H490L480 255M420 303H540"/>
       <path d="M449 302L469 284H501V302" fill="#dceff1"/>
     </g>
-    <text x="480" y="393" text-anchor="middle" font-size="18" font-weight="700">Produces functional parts</text>
+    <text x="480" y="393" text-anchor="middle" font-size="16" font-weight="700">Produces functional parts</text>
     <g fill="none" stroke="#0b7181" stroke-width="2" marker-end="url(#arrow)">
       <path d="M238 146H349"/>
       <path d="M350 184H239"/>
