@@ -1,0 +1,118 @@
+{
+  "schema_version": 1,
+  "root": "CoreXYPlant::XYStage",
+  "state": "CoreXYVerification::Controller::logic",
+  "case": "CoreXYVerification::diagonalMove",
+  "wasm": {
+    "module": "../build/corexy-diagonal.wasm",
+    "fuel": 2000000,
+    "memory_bytes": 2097152,
+    "exports": {
+      "version": "api",
+      "boot": "initialize",
+      "time": "clock",
+      "next_event": "deadline",
+      "advance_to": "advance",
+      "signal": "receive",
+      "read": "sample",
+      "provide": "provide"
+    },
+    "observations": [
+      {
+        "attribute": "CoreXYVerification::Controller::logic::fieldAngleA",
+        "index": 0,
+        "unit": "rad"
+      },
+      {
+        "attribute": "CoreXYVerification::Controller::logic::currentCommandA",
+        "index": 1,
+        "unit": "A"
+      },
+      {
+        "attribute": "CoreXYVerification::Controller::logic::fieldAngleB",
+        "index": 7,
+        "unit": "rad"
+      },
+      {
+        "attribute": "CoreXYVerification::Controller::logic::currentCommandB",
+        "index": 8,
+        "unit": "A"
+      },
+      {
+        "attribute": "CoreXYVerification::Controller::logic::settlingTime",
+        "index": 2,
+        "unit": null
+      },
+      {
+        "attribute": "CoreXYVerification::Controller::logic::residualAmplitude",
+        "index": 3,
+        "unit": null
+      },
+      {
+        "attribute": "CoreXYVerification::Controller::logic::trackingError",
+        "index": 4,
+        "unit": null
+      }
+    ],
+    "provides": [
+      {
+        "variable": "carriageX.s",
+        "index": 0,
+        "unit": "m"
+      },
+      {
+        "variable": "beltA.flange_a.s",
+        "index": 1,
+        "unit": "m"
+      },
+      {
+        "variable": "carriageY.s",
+        "index": 4,
+        "unit": "m"
+      },
+      {
+        "variable": "beltB.flange_a.s",
+        "index": 5,
+        "unit": "m"
+      }
+    ],
+    "signals": {}
+  },
+  "bindings": [
+    {
+      "attribute": "CoreXYVerification::Controller::logic::fieldAngleA",
+      "input": "motorA_fieldAngle",
+      "enum_values": {}
+    },
+    {
+      "attribute": "CoreXYVerification::Controller::logic::currentCommandA",
+      "input": "motorA_currentCommand",
+      "enum_values": {}
+    },
+    {
+      "attribute": "CoreXYVerification::Controller::logic::fieldAngleB",
+      "input": "motorB_fieldAngle",
+      "enum_values": {}
+    },
+    {
+      "attribute": "CoreXYVerification::Controller::logic::currentCommandB",
+      "input": "motorB_currentCommand",
+      "enum_values": {}
+    }
+  ],
+  "plant_observations": [
+    {
+      "attribute": "CoreXYVerification::Controller::logic::finalX",
+      "variable": "carriageX.s",
+      "unit": "m"
+    },
+    {
+      "attribute": "CoreXYVerification::Controller::logic::finalY",
+      "variable": "carriageY.s",
+      "unit": "m"
+    }
+  ],
+  "initial_inputs": {},
+  "rtol": 1e-08,
+  "atol": 1e-10
+}

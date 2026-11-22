@@ -37,6 +37,7 @@ decide how fast the printer can go before the vibration shows in the part.
 | Decision record for the lead candidate | `records/ADR-001-lead-architecture.md` |
 | One axis: stepper, pulley, belt and carriage, with Modelica reference cases | `model/70_verification/AxisPlant.sysml`, `tests/modelica`, `docs/axis-model.md` |
 | The axis controller firmware (three drives) and its verification by simulation (SYS-006, 007, 008) | `firmware/axis-controller`, `model/70_verification/AxisVerification.sysml`, `verification`, `scripts/axis_design.py`, `docs/axis-verification.md` |
+| Two-motor CoreXY plant and diagonal verification | [CoreXY motion model](docs/corexy-model.md) |
 
 Each system requirement constrains a property of the specification against a number in `Limits`, and
 `Traceability` links it to the stakeholder needs it serves.
@@ -55,9 +56,10 @@ Each system requirement constrains a property of the specification against a num
    the loop (`docs/axis-verification.md`). Without input shaping the carriage never settles within 20 um; a shaper
    leaves 6 um and is forgiving of an 11 percent error in the resonance it is tuned to. A closed-loop stepper and a
    brushless servo are verified the same way: with a shaper all three pass and none loses the move, because the belt,
-   not the drive, limits the acceleration (about 14 m/s^2 against the 10 required). Next: the heater control and the
-   runaway monitor.
-5. **Documents** generated with Doc42, with the verdicts and plots in them.
+   not the drive, limits the acceleration (about 14 m/s^2 against the 10 required).
+5. **CoreXY motion** uses two motor and belt paths to model simultaneous X/Y motion. Run the diagonal case with a
+   local Run42 development build. See [the model and reproduction steps](docs/corexy-model.md).
+6. **Documents** generated with Doc42, with the verdicts and plots in them.
 
 ## The trade study
 
@@ -74,9 +76,8 @@ outcomes the analysis is expected to give.
 
 ## Validate
 
-The axis model uses the stepper motor added to the Elan8 domain library after release 0.8.0. Until a release has it,
-point the scripts at a checkout of the domain library with `ELAN8_DOMAIN_LIBRARY=<checkout>` (and the Modelica tests
-at its Modelica package with `ELAN8_MODELICA=<checkout>/modelica`).
+The motion models use the stepper motor from Elan8 domain libraries v0.9.0. For the Modelica reference tests,
+extract the release's `elan8-domain-modelica-0.9.0.zip` and set `ELAN8_MODELICA` to the directory containing `Elan8/`.
 
 ```bash
 python3 scripts/validate_spec42.py

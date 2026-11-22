@@ -12,6 +12,24 @@ package AxisTests "One motion axis: a stepper motor, a 20-tooth belt pulley, a b
     annotation(experiment(StopTime = 0.05));
   end AxisBeltOnly;
 
+  model CoreXYBeltOnly "Two fixed pulley positions excite both Cartesian axes through the transmission"
+    Modelica.Mechanics.Translational.Components.Fixed pulleyA(s0 = 3e-4);
+    Modelica.Mechanics.Translational.Components.Fixed pulleyB(s0 = 1e-4);
+    Modelica.Mechanics.Translational.Components.Spring beltA(c = 6.3e4);
+    Modelica.Mechanics.Translational.Components.Spring beltB(c = 6.3e4);
+    CoreXYTransmission transmission;
+    Modelica.Mechanics.Translational.Components.Mass carriageX(m = 0.67, s(start = 0, fixed = true), v(start = 0, fixed = true));
+    Modelica.Mechanics.Translational.Components.Mass carriageY(m = 0.67, s(start = 0, fixed = true), v(start = 0, fixed = true));
+  equation
+    connect(pulleyA.flange, beltA.flange_a);
+    connect(pulleyB.flange, beltB.flange_a);
+    connect(beltA.flange_b, transmission.beltA);
+    connect(beltB.flange_b, transmission.beltB);
+    connect(transmission.carriageX, carriageX.flange_a);
+    connect(transmission.carriageY, carriageY.flange_a);
+    annotation(experiment(StopTime = 0.05));
+  end CoreXYBeltOnly;
+
   model AxisStepperHold "The same carriage on a stepper motor holding a fixed field angle at 1.5 A: the motor's own stiffness and rotor inertia are part of the axis"
     Elan8.Electronics.Actuation.StepperMotor motor(phaseResistance = 1.6, phaseInductance = 3.4e-3,
       torqueConstant = 0.3, rotorTeeth = 50, rotorInertia = 5.7e-6, supplyVoltage = 24);

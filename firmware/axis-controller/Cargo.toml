@@ -15,6 +15,7 @@ crate-type = ["cdylib"]
 
 [features]
 closed_loop = []
+corexy = ["closed_loop"]
 servo = []
 shaper6150 = []
 shaper6208 = []

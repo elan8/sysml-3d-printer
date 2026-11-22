@@ -73,6 +73,38 @@ def driver(module, plant="AxisPlant::BeltAxis", drive="open"):
     }
 
 
+def corexy_driver():
+    state = "CoreXYVerification::Controller::logic"
+    configuration = driver("corexy-diagonal.wasm", "CoreXYPlant::XYStage")
+    configuration["state"] = state
+    configuration["case"] = "CoreXYVerification::diagonalMove"
+    configuration["wasm"]["observations"] = [
+        {"attribute": f"{state}::{name}", "index": index, "unit": unit}
+        for name, index, unit in (
+            ("fieldAngleA", 0, "rad"), ("currentCommandA", 1, "A"),
+            ("fieldAngleB", 7, "rad"), ("currentCommandB", 8, "A"),
+            ("settlingTime", 2, None), ("residualAmplitude", 3, None), ("trackingError", 4, None),
+        )
+    ]
+    configuration["wasm"]["provides"] = [
+        {"variable": variable, "index": index, "unit": "m"}
+        for variable, index in (
+            ("carriageX.s", 0), ("beltA.flange_a.s", 1),
+            ("carriageY.s", 4), ("beltB.flange_a.s", 5),
+        )
+    ]
+    configuration["bindings"] = [
+        {"attribute": f"{state}::{name}{motor}", "input": f"motor{motor}_{name}", "enum_values": {}}
+        for motor in ("A", "B")
+        for name in ("fieldAngle", "currentCommand")
+    ]
+    configuration["plant_observations"] = [
+        {"attribute": f"{state}::final{axis}", "variable": f"carriage{axis}.s", "unit": "m"}
+        for axis in ("X", "Y")
+    ]
+    return configuration
+
+
 def main():
     out = ROOT / "verification"
     out.mkdir(exist_ok=True)
@@ -80,6 +112,9 @@ def main():
         path = out / f"axis-{name}.json"
         path.write_text(json.dumps(driver(module, plant, drive), indent=2) + "\n", encoding="utf-8")
         print("wrote", path.relative_to(ROOT))
+    path = out / "corexy-diagonal.json"
+    path.write_text(json.dumps(corexy_driver(), indent=2) + "\n", encoding="utf-8")
+    print("wrote", path.relative_to(ROOT))
 
 
 if __name__ == "__main__":
