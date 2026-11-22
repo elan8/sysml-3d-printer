@@ -47,6 +47,7 @@ package PrinterDocuments {
     view context {
       @Section { title = "Stakeholders and operating context"; }
       @Prose { file = "prose/crs-context.md"; }
+      @Figure { file = "../../docs/system-overview/context.svg"; caption = "The printer's boundary: the engineer, the technician, the team lead, the office neighbour, the filament and the mains power"; }
     }
 
     view scenarios {

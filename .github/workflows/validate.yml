@@ -13,7 +13,7 @@ permissions:
   contents: read
 
 env:
-  DOC42_VERSION: "0.8.1"
+  DOC42_VERSION: "0.8.2"
 
 jobs:
   model:
@@ -65,7 +65,7 @@ jobs:
 
       # The four engineering documents, built from the model and the generated prose and figures.
       - name: Install Doc42
-        uses: elan8/doc42-release@v0.8.1
+        uses: elan8/doc42-release@v0.8.2
         with:
           version: ${{ env.DOC42_VERSION }}
 

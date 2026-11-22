@@ -130,7 +130,7 @@ def domain_library_args() -> list[str]:
 
 
 def domain_library_path() -> Path:
-    """Resolve the domain library version in config/domain-library.json.
+    """Resolve the released domain library pinned in config/domain-library.json.
 
     The pinned Spec42 release bundles an older domain library, so this project uses the release it names:
     the KPAR is downloaded from that release, checked against the checksum the release publishes, and
@@ -142,7 +142,7 @@ def domain_library_path() -> Path:
 
     override = os.environ.get("ELAN8_DOMAIN_LIBRARY")
     if override:
-        return Path(override)
+        return Path(override).resolve()
     config = json.loads((REPO_ROOT / "config" / "domain-library.json").read_text(encoding="utf-8"))
     version, repository = config["version"], config["repository"].removesuffix(".git")
     cache = REPO_ROOT / ".cache"

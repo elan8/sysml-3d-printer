@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="8 0 944 531" role="img" aria-labelledby="title desc">
+  <!-- SPDX-FileCopyrightText: 2026 Elan8 -->
+  <!-- SPDX-License-Identifier: MIT -->
+  <title id="title">CoreXY belt coordinates and measurement points</title>
+  <desc id="desc">A plan-view schematic shows fixed motors A and B, a gantry and the nozzle. Each encoder measures at its motor pulley, while the test bench samples nozzle X and Y. Positive X calls for equal positive belt travel. Positive Y calls for opposite belt travel.</desc>
+  <defs>
+    <marker id="axis-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 0 10 5 0 10Z" fill="#173143"/>
+    </marker>
+    <marker id="belt-a-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M0 0 10 5 0 10Z" fill="#0b7181"/>
+    </marker>
+    <marker id="belt-b-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M0 0 10 5 0 10Z" fill="#963d15"/>
+    </marker>
+  </defs>
+  <rect width="960" height="531" fill="#fff"/>
+  <rect x="12" y="12" width="936" height="507" rx="16" fill="#f2f6f8" stroke="#b9cbd3"/>
+  <g font-family="DejaVu Sans, Arial, sans-serif" fill="#173143">
+    <text x="38" y="51" font-size="25" font-weight="700">CoreXY motion and measurement</text>
+    <text x="38" y="77" font-size="17" fill="#425c6a">Plan view of the simulated belt paths</text>
+    <rect x="38" y="104" width="522" height="375" rx="11" fill="#fff" stroke="#bdcdd5"/>
+    <path d="M82 159H518V439H82Z" fill="none" stroke="#9aafb9" stroke-width="3" stroke-linejoin="round"/>
+    <rect x="85" y="279" width="430" height="52" rx="6" fill="#e5edf0" stroke="#9aafb9"/>
+    <text x="110" y="314" font-size="17" fill="#425c6a">Gantry</text>
+    <g fill="none" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M114 186V263H160L169 257 178 269 187 257 196 269 205 257 214 263H292V290" stroke="#0b7181"/>
+      <path d="M486 186V263H440L431 257 422 269 413 257 404 269 395 257 386 263H308V290" stroke="#963d15"/>
+    </g>
+    <path d="M222 263H259" stroke="#0b7181" stroke-width="2" marker-end="url(#belt-a-arrow)"/>
+    <path d="M378 263H341" stroke="#963d15" stroke-width="2" marker-end="url(#belt-b-arrow)"/>
+    <circle cx="114" cy="186" r="19" fill="#fff" stroke="#0b7181" stroke-width="3"/>
+    <circle cx="486" cy="186" r="19" fill="#fff" stroke="#963d15" stroke-width="3"/>
+    <circle cx="114" cy="186" r="6" fill="#0b7181"/>
+    <circle cx="486" cy="186" r="6" fill="#963d15"/>
+    <text x="146" y="183" font-size="19" font-weight="700">Motor A</text>
+    <text x="146" y="205" font-size="16" fill="#425c6a">Pulley encoder</text>
+    <text x="454" y="183" text-anchor="end" font-size="19" font-weight="700">Motor B</text>
+    <text x="454" y="205" text-anchor="end" font-size="16" fill="#425c6a">Pulley encoder</text>
+    <text x="173" y="246" font-size="17" fill="#0b7181">Belt A</text>
+    <text x="427" y="246" text-anchor="end" font-size="17" fill="#963d15">Belt B</text>
+    <rect x="279" y="285" width="42" height="38" rx="6" fill="#123747"/>
+    <path d="M287 324H313L300 339Z" fill="#123747"/>
+    <circle cx="300" cy="342" r="5" fill="#0b7181" stroke="#fff" stroke-width="2"/>
+    <path d="M300 347V381H344" fill="none" stroke="#637888" stroke-dasharray="5 4" stroke-width="1.6"/>
+    <text x="355" y="378" font-size="18" font-weight="700">Nozzle X, Y</text>
+    <text x="355" y="402" font-size="16" fill="#425c6a">Test-bench sample</text>
+    <path d="M128 411H173" fill="none" stroke="#173143" stroke-width="2" marker-end="url(#axis-arrow)"/>
+    <path d="M128 411V366" fill="none" stroke="#173143" stroke-width="2" marker-end="url(#axis-arrow)"/>
+    <text x="111" y="367" font-size="16">Y</text>
+    <text x="178" y="416" font-size="16">X</text>
+    <rect x="582" y="104" width="340" height="205" rx="11" fill="#fff" stroke="#bdcdd5"/>
+    <text x="605" y="137" font-size="20" font-weight="700">Belt commands</text>
+    <text x="605" y="170" fill="#0b7181" font-size="20" font-weight="700">A = X + Y</text>
+    <text x="763" y="170" fill="#963d15" font-size="20" font-weight="700">B = X − Y</text>
+    <path d="M605 188H899M605 228H899M605 265H899" stroke="#d3dfe4"/>
+    <g font-size="16">
+      <text x="605" y="215" font-weight="700">Nozzle move</text>
+      <text x="787" y="215" text-anchor="middle" font-weight="700">A</text>
+      <text x="873" y="215" text-anchor="middle" font-weight="700">B</text>
+      <text x="605" y="252">Positive X</text>
+      <text x="787" y="252" text-anchor="middle" fill="#0b7181">+</text>
+      <text x="873" y="252" text-anchor="middle" fill="#963d15">+</text>
+      <text x="605" y="289">Positive Y</text>
+      <text x="787" y="289" text-anchor="middle" fill="#0b7181">+</text>
+      <text x="873" y="289" text-anchor="middle" fill="#963d15">−</text>
+    </g>
+    <rect x="582" y="327" width="340" height="152" rx="11" fill="#e3f1f3" stroke="#aecbd2"/>
+    <text x="605" y="360" font-size="20" font-weight="700">Two measurements</text>
+    <g font-size="16">
+      <text x="605" y="393">Controller · pulley travel at A and B</text>
+      <text x="605" y="421">Test bench · true nozzle position</text>
+      <text x="605" y="450" fill="#425c6a">Elastic belts let the two readings differ.</text>
+    </g>
+  </g>
+</svg>

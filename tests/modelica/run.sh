@@ -31,7 +31,8 @@ if [[ ! -d "$msl" ]]; then
   unzip -q "$cache/msl.zip" -d "$msl"
 fi
 roots=(--source-root "$elan8/Elan8" --source-root "$msl/Modelica $MSL_NUMBER"
-       --source-root "$msl/Complex.mo" --source-root "$msl/ModelicaServices $MSL_NUMBER")
+       --source-root "$msl/Complex.mo" --source-root "$msl/ModelicaServices $MSL_NUMBER"
+       --source-root "$here/../../model/70_verification/CoreXYTransmission.mo")
 tol=(--rtol 1e-9 --atol 1e-12)
 
 "$rumoca" --version
@@ -40,5 +41,6 @@ sim() { # model output-step
 }
 sim AxisBeltOnly 1e-5
 sim AxisStepperHold 1e-5
+sim CoreXYBeltOnly 1e-5
 
 python3 "$here/check.py" "$out"

@@ -27,6 +27,12 @@ interested in model-based systems engineering with control engineering in it, th
 > replaced by sourced or measured values. Nothing here claims compliance with any regulation or standard, and a heated,
 > mains-powered machine can start a fire. See [NOTICE.md](NOTICE.md).
 
+## System context
+
+![System boundary showing the engineer, technician, team lead, office neighbour, filament and mains power](docs/system-overview/context.svg)
+
+See the [system overview](docs/system-overview/README.md) for the lead architecture and its six subsystems.
+
 ## What you can learn from it
 
 The analysis produced results that were not obvious from the requirements:
@@ -79,9 +85,29 @@ CI builds the documents on every run and keeps the PDFs as the `documents` artif
 | The axis plant as Modelica, with reference cases that have exact answers | `tests/modelica`, `docs/axis-model.md` |
 | The motion controller firmware (WebAssembly, three drives) and its verification | `firmware/axis-controller`, `verification`, `docs/axis-verification.md` |
 | An independent integration of the whole axis, where the controller gains were chosen | `scripts/axis_design.py` |
+| Two-motor CoreXY plant and diagonal verification | [CoreXY motion model](docs/corexy-model.md) |
+| Directional moves and corner design study with its simulation data | [CoreXY toolpath verification](docs/corexy-study/README.md) |
+| Print-job lifecycle, supervisor interfaces and software ownership | [Print-job supervision](docs/print-supervisor.md) |
+| Hotend warm-up, watchdog and power-cutoff traces | [Hotend verification](docs/hotend-study/README.md) |
 
 Each system requirement constrains a property of the specification against a number in `Limits`, and every customer
 requirement has a derivation (`Traceability`) that names the system requirements derived from it and why they are enough.
+
+## Status
+
+1. **Context, use cases and requirements**: done.
+2. **Architecture alternatives**: done for the first pass: six candidates compared, with the lead candidate proposed in
+   ADR-001 (a CoreXY on an extrusion frame with closed-loop steppers, a high-flow hotend and a 32-bit board with input shaping).
+3. **One axis**: a stepper motor, a belt and a carriage with a resonance, as Modelica classes with exact-answer checks
+   ([axis model](docs/axis-model.md)).
+4. **Verification of the axis** with Run42, with the motion controller's firmware in the loop
+   ([axis verification](docs/axis-verification.md)).
+5. **CoreXY motion**: two motor and belt paths model simultaneous X/Y motion ([CoreXY motion model](docs/corexy-model.md)),
+   with directional moves and a corner design study ([toolpath verification](docs/corexy-study/README.md)).
+6. **Print-job supervision and the hotend**: the job lifecycle and supervisor interfaces
+   ([print-job supervision](docs/print-supervisor.md)), and hotend warm-up, watchdog and power cut-off
+   ([hotend verification](docs/hotend-study/README.md)).
+7. **Documents** generated with Doc42, as above.
 
 ## Try it
 
