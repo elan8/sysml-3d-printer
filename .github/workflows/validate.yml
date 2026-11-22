@@ -112,6 +112,80 @@ jobs:
         with:
           path: generated/documents
 
+  # Verifies one motion axis with the controller firmware in the loop, using the Run42 package published at
+  # elan8/run42-release and the Elan8 API token. The package pins an older domain library than the model uses (the stepper
+  # motor is in 0.9.0), so the released library the model pins is put over the package's.
+  axis:
+    name: Axis verification with Run42
+    runs-on: ubuntu-22.04
+    env:
+      RUN42_VERSION: "0.1.0-beta.1"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Prepare the pinned domain libraries
+        run: |
+          domain_path="$(PYTHONPATH=scripts python3 -c 'from _spec42 import domain_library_path; print(domain_library_path())')"
+          echo "DOMAIN_LIBRARY_PATH=$domain_path" >> "$GITHUB_ENV"
+          version="$(jq -r .version config/domain-library.json)"
+          repository="$(jq -r .repository config/domain-library.json)"
+          release="${repository%.git}/releases/download/v$version"
+          archive="elan8-domain-modelica-$version.zip"
+          modelica="$GITHUB_WORKSPACE/.libraries/modelica"
+          mkdir -p "$modelica"
+          curl --fail --silent --show-error --location --retry 3 "$release/$archive" --output "$modelica/$archive"
+          (cd "$modelica" && sha256sum --check --ignore-missing "$GITHUB_WORKSPACE/.cache/SHA256SUMS-$version.txt" && unzip -q "$archive")
+          echo "ELAN8_MODELICA=$modelica" >> "$GITHUB_ENV"
+
+      - name: Install Run42
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          package="run42-$RUN42_VERSION-linux-x64"
+          mkdir -p "$RUNNER_TEMP/run42"
+          if ! gh release download "v$RUN42_VERSION" --repo elan8/run42-release \
+              --pattern "$package.tar.gz" --pattern SHA256SUMS.txt --dir "$RUNNER_TEMP/run42"; then
+            echo "::error::Run42 $RUN42_VERSION cannot be downloaded from elan8/run42-release: the release is not published, or the token cannot read it."
+            exit 1
+          fi
+          (cd "$RUNNER_TEMP/run42" && sha256sum --check --ignore-missing SHA256SUMS.txt && tar -xzf "$package.tar.gz")
+          root="$RUNNER_TEMP/run42/$package"
+          # The domain library of the package is older than the one the model pins: use the pinned one.
+          rm -rf "$root/domain-library" "$root/modelica/Elan8"
+          cp -R "$DOMAIN_LIBRARY_PATH/model" "$root/domain-library"
+          cp -R "$ELAN8_MODELICA/Elan8" "$root/modelica/Elan8"
+          echo "RUN42=$root/run42" >> "$GITHUB_ENV"
+          "$root/run42" --version
+
+      - name: Add the WebAssembly target for the firmware
+        run: rustup target add wasm32-unknown-unknown
+
+      # A failing verdict is a result: the trapezoidal moves are expected to fail. The next step checks the pattern.
+      - name: Verify the axis
+        env:
+          ELAN8_TOKEN: ${{ secrets.ELAN8_TOKEN }}
+        run: bash scripts/verify_axis.sh
+
+      - name: Check the verdicts
+        run: python3 scripts/check_axis_verdicts.py build/axis
+
+      - name: Upload the verdicts and traces
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: axis-verification
+          path: |
+            build/axis/*-verdicts.json
+            build/axis/*/*.svg
+          retention-days: 7
+          if-no-files-found: ignore
+
   pages:
     name: Publish documents
     needs: model
