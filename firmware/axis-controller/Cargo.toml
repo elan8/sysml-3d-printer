@@ -1,0 +1,22 @@
+# The motion controller of one axis as firmware for Run42's WebAssembly guest interface (ABI version 2): a trapezoidal
+# move, an optional zero-vibration input shaper, microstep quantisation and the stepper's field angle and current.
+# The features choose the shaper: none (the default), one tuned to the axis (62 Hz) or one tuned to the belt alone (69 Hz).
+[workspace]
+
+[package]
+name = "axis_controller"
+version = "0.0.0"
+edition = "2021"
+publish = false
+
+[lib]
+crate-type = ["cdylib"]
+
+[features]
+shaper62 = []
+shaper69 = []
+
+[profile.release]
+opt-level = 3
+panic = "abort"
+lto = true

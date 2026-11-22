@@ -85,5 +85,26 @@ class Candidates(unittest.TestCase):
         self.assertLess(self.results["CoreXYClosedBasic"]["speed"], self.limits["speedRequired"])
 
 
+class AxisPlant(unittest.TestCase):
+    """The axis model repeats the lead candidate's mechanical figures: a change in the structure or the hotend has to
+    be made in the axis too."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.model = ts.Model(ts.export())
+
+    def test_the_axis_has_the_belt_stiffness_and_moving_mass_of_the_lead_candidate(self):
+        structure = self.model.attributes("MotionStructureSystem::CoreXYExtrusionArchitecture")
+        hotend = self.model.attributes("HotendSystem::HighFlowHotendArchitecture")
+        belt = self.model.attributes("AxisPlant::BeltAxis::belt")
+        carriage = self.model.attributes("AxisPlant::BeltAxis::carriage")
+        self.assertAlmostEqual(belt["stiffness"], structure["stiffness"])
+        self.assertAlmostEqual(carriage["mass"], structure["movingMass"] + hotend["mass"])
+
+    def test_the_axis_pulley_is_a_20_tooth_2_mm_pitch_gt2_pulley(self):
+        pulley = self.model.attributes("AxisPlant::BeltAxis::pulley")
+        self.assertAlmostEqual(pulley["radius"], 20 * 0.002 / (2 * math.pi), places=4)
+
+
 if __name__ == "__main__":
     unittest.main()

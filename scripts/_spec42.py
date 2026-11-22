@@ -133,6 +133,10 @@ def domain_library_args() -> list[str]:
     import json
     import zipfile
 
+    override = os.environ.get("ELAN8_DOMAIN_LIBRARY")
+    if override:
+        # A checkout of the domain library (the directory that holds model/), for a class that is not released yet.
+        return ["--kpar-library-path", f"domain={override}"]
     config = json.loads((REPO_ROOT / "config" / "domain-library.json").read_text(encoding="utf-8"))
     version, repository = config["version"], config["repository"].removesuffix(".git")
     cache = REPO_ROOT / ".cache"

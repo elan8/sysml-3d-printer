@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "root": "AxisPlant::BeltAxis",
+  "state": "AxisVerification::AxisController::logic",
+  "case": "AxisVerification::moveTest",
+  "wasm": {
+    "module": "../build/axis-trapezoid.wasm",
+    "fuel": 2000000,
+    "memory_bytes": 2097152,
+    "exports": {
+      "version": "api",
+      "boot": "initialize",
+      "time": "clock",
+      "next_event": "deadline",
+      "advance_to": "advance",
+      "signal": "receive",
+      "read": "sample",
+      "provide": "provide"
+    },
+    "observations": [
+      {
+        "attribute": "AxisVerification::AxisController::logic::fieldAngle",
+        "index": 0,
+        "unit": "rad"
+      },
+      {
+        "attribute": "AxisVerification::AxisController::logic::currentCommand",
+        "index": 1,
+        "unit": "A"
+      },
+      {
+        "attribute": "AxisVerification::AxisController::logic::settlingTime",
+        "index": 2,
+        "unit": null
+      },
+      {
+        "attribute": "AxisVerification::AxisController::logic::residualAmplitude",
+        "index": 3,
+        "unit": null
+      },
+      {
+        "attribute": "AxisVerification::AxisController::logic::trackingError",
+        "index": 4,
+        "unit": null
+      }
+    ],
+    "provides": [
+      {
+        "variable": "carriage.s",
+        "index": 0,
+        "unit": "m"
+      }
+    ],
+    "signals": {}
+  },
+  "bindings": [
+    {
+      "attribute": "AxisVerification::AxisController::logic::fieldAngle",
+      "input": "fieldAngle",
+      "enum_values": {}
+    },
+    {
+      "attribute": "AxisVerification::AxisController::logic::currentCommand",
+      "input": "currentCommand",
+      "enum_values": {}
+    }
+  ],
+  "plant_observations": [
+    {
+      "attribute": "AxisVerification::AxisController::logic::finalPosition",
+      "variable": "carriage.s",
+      "unit": "m"
+    }
+  ],
+  "initial_inputs": {},
+  "rtol": 1e-08,
+  "atol": 1e-10
+}
