@@ -1,0 +1,5 @@
+.cache/
+tests/modelica/out/
+__pycache__/
+generated/
+build/
