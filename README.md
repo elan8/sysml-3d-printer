@@ -46,6 +46,7 @@ See the [system overview](docs/system-overview/README.md) for the lead architect
 | Two-motor CoreXY plant and diagonal verification | [CoreXY motion model](docs/corexy-model.md) |
 | Directional moves and corner design study with its simulation data | [CoreXY toolpath verification](docs/corexy-study/README.md) |
 | Print-job lifecycle, supervisor interfaces and software ownership | [Print-job supervision](docs/print-supervisor.md) |
+| Hotend warm-up, watchdog and power-cutoff traces | [Hotend verification](docs/hotend-study/README.md) |
 
 Each system requirement constrains a property of the specification against a number in `Limits`, and
 `Traceability` links it to the stakeholder needs it serves.

@@ -57,9 +57,9 @@ its output ports. The state machine owns the decisions behind those outputs.
 
 The 13 authored Run42 cases cover readiness in either order, the nominal print, pause and resume interlocks,
 cancellation, fault response and recovery. They inject typed events at the supervisor boundary and assert its
-state and requests. The heater-fault case checks the response to a reported fault. Measuring the time from a
-physical heater or sensor fault to detection and de-energization under SYS-015 requires the thermal plant and
-device I/O to be bound. The stop and heat-off outputs here are commands.
+state and requests. The discrete heater-fault case checks the response to a reported fault. The
+[hotend study](hotend-study/README.md) couples the same supervisor to a thermal plant to time one simulated
+weak-heater failure. Hardware shutoff and sensor faults remain separate cases.
 [Verification cases](../verification/supervisor/SupervisorVerification.sysml)
 
 Set `RUN42` to a local development executable and `SPEC42_STDLIB_ROOT` to the unpacked SysML standard library.

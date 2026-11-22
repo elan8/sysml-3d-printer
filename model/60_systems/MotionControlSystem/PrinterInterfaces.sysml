@@ -70,6 +70,9 @@ package PrinterInterfaces {
 
   port def SupervisorSafetyPort {
     in item fault : HeaterFault;
+    in attribute warmupAlarm : Real {
+      doc /* Sampled warm-up watchdog level: 0 clear, 1 latched. */
+    }
     in item recoveryConfirmed : RecoveryConfirmed;
   }
 }
